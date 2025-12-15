@@ -355,6 +355,58 @@ export const quizzes: QuizQuestion[] = [
     ],
     correctAnswer: 1,
     explanation: "Month 1 focuses on auditing 1 AI tool using AIF360 to build momentum and identify immediate risks before broader initiatives."
+  },
+
+  // Conclusion - 5 questions
+  {
+    id: "conclusion-1",
+    chapterId: 7,
+    question: "According to the Conclusion, what is the recommended first step to start your AI ethics journey?",
+    options: [
+      "Hire an AI ethics consultant",
+      "Audit one AI tool using AIF360",
+      "Create a 50-page ethics policy",
+      "Train all employees immediately"
+    ],
+    correctAnswer: 1,
+    explanation: "The playbook recommends starting small: audit one AI tool today using the AIF360 bias check. Takes 20 minutes, costs $0, and prevents $100K+ in damage."
+  },
+  {
+    id: "conclusion-2",
+    chapterId: 7,
+    question: "How many items are in the AI Ethics Audit Checklist provided in the Appendix?",
+    options: ["10 items", "15 items", "20 items", "25 items"],
+    correctAnswer: 2,
+    explanation: "The AI Ethics Audit Checklist contains 20 items covering everything from listing AI tools to legal review and AEL sign-off."
+  },
+  {
+    id: "conclusion-3",
+    chapterId: 7,
+    question: "According to the AI Ethics Policy Template, how many core commitments should an SMB make?",
+    options: ["4 commitments", "5 commitments", "6 commitments", "8 commitments"],
+    correctAnswer: 2,
+    explanation: "The policy template includes 6 commitments: Fair, Transparent, Accountable, Private, Safe, and Sustainable."
+  },
+  {
+    id: "conclusion-4",
+    chapterId: 7,
+    question: "What metaphor does the Conclusion use to describe AI ethics practice?",
+    options: [
+      "A marathon that requires endurance",
+      "A muscle that grows with monthly exercise",
+      "A garden that needs daily watering",
+      "A foundation that must be built once"
+    ],
+    correctAnswer: 1,
+    explanation: "The Conclusion states: 'Ethics isn't a one-time project. It's a muscle. Flex it monthly, and it grows. Neglect it, and it atrophies.'"
+  },
+  {
+    id: "conclusion-5",
+    chapterId: 7,
+    question: "How often should enforcement audits be conducted according to the AI Ethics Policy Template?",
+    options: ["Monthly", "Quarterly", "Bi-annually", "Annually"],
+    correctAnswer: 1,
+    explanation: "The AI Ethics Policy Template specifies: 'Enforcement: Quarterly audits. Violations → retraining or termination.'"
   }
 ];
 

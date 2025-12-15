@@ -99,6 +99,8 @@ export default function QuizPage() {
           <div className="grid md:grid-cols-2 gap-6">
             {chapters.map((chapter, index) => {
               const chapterQuestionCount = quizzes.filter(q => q.chapterId === chapter.id).length;
+              // Skip chapters with no questions
+              if (chapterQuestionCount === 0) return null;
               return (
                 <button
                   key={chapter.id}
