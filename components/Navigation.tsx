@@ -28,7 +28,7 @@ export default function Navigation() {
                 <div className="font-black text-xl bg-gradient-to-r from-purple-200 to-indigo-200 bg-clip-text text-transparent">
                   AI Ethics Playbook
                 </div>
-                <div className="text-xs text-purple-300 font-semibold">for SMBs</div>
+                <div className="text-xs text-purple-300 font-semibold">for Professionals</div>
               </div>
             </Link>
           </div>

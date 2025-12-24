@@ -1,6 +1,15 @@
 import Link from "next/link";
-import { BookOpen, Bot, GraduationCap, ArrowRight, Sparkles, Zap, LucideIcon } from "lucide-react";
+import { BookOpen, Bot, GraduationCap, ArrowRight, Sparkles, Zap, LucideIcon, Building2, Landmark, HeartPulse, Users, Clock } from "lucide-react";
 import { ebookMetadata } from "@/data/ebook-content";
+import { getAllTracks, LearningTrack } from "@/data/tracks";
+
+// Icon mapping for dynamic track rendering
+const iconMap: Record<string, LucideIcon> = {
+  Building2,
+  Landmark,
+  HeartPulse,
+  Users,
+};
 
 export default function Home() {
   return (
@@ -29,7 +38,7 @@ export default function Home() {
           </h1>
           
           <div className="text-2xl md:text-3xl font-bold text-purple-100 mb-6 animate-fade-in-up delay-100">
-            for Small and Medium Businesses
+            for Businesses &amp; Professionals
           </div>
           
           <p className="text-xl md:text-2xl text-purple-200/90 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in-up delay-200">
@@ -92,6 +101,30 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <FeatureCard key={feature.title} {...feature} index={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Learning Tracks Section */}
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 backdrop-blur-sm border border-indigo-500/30 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
+              <Sparkles className="w-4 h-4 text-cyan-300" />
+              <span>Choose Your Path</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Learning Tracks for Every Professional
+            </h2>
+            <p className="text-xl text-purple-200/80 max-w-3xl mx-auto">
+              Whether you&apos;re a business owner, government employee, healthcare professional, or HR specialist, we have a tailored learning path for you.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {getAllTracks().map((track, index) => (
+              <TrackCard key={track.id} track={track} index={index} />
             ))}
           </div>
         </div>
@@ -224,3 +257,88 @@ const stats = [
   { value: "8", label: "Expert Chapters" },
   { value: "40+", label: "Quiz Questions" }
 ];
+
+// Track Card Component
+interface TrackCardProps {
+  track: LearningTrack;
+  index: number;
+}
+
+function TrackCard({ track, index }: TrackCardProps) {
+  const Icon = iconMap[track.icon] || Building2;
+  const isActive = track.isActive;
+  
+  const CardContent = (
+    <div className="relative h-full">
+      <div className={`absolute inset-0 bg-gradient-to-br ${track.color} rounded-3xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500`}></div>
+      <div className={`relative bg-slate-800/50 backdrop-blur-sm border rounded-3xl p-6 h-full transition-all duration-300 ${
+        isActive 
+          ? "border-white/20 hover:border-white/40 transform hover:scale-105 hover:-translate-y-2" 
+          : "border-white/10 opacity-75"
+      }`}>
+        {/* Coming Soon Badge */}
+        {track.comingSoon && (
+          <div className="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+            Coming Soon
+          </div>
+        )}
+        
+        {/* Icon */}
+        <div className={`w-14 h-14 bg-gradient-to-br ${track.color} rounded-2xl flex items-center justify-center mb-4 shadow-lg ${isActive ? "group-hover:rotate-6 group-hover:scale-110" : ""} transition-transform duration-300`}>
+          <Icon className="w-7 h-7 text-white" />
+        </div>
+        
+        {/* Title */}
+        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-200 transition-colors">
+          {track.shortTitle}
+        </h3>
+        
+        {/* Description */}
+        <p className="text-purple-200/70 text-sm leading-relaxed mb-4 line-clamp-3">
+          {track.description}
+        </p>
+        
+        {/* Meta info */}
+        <div className="flex items-center gap-4 text-xs text-purple-300/80">
+          <div className="flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            <span>{track.estimatedTime}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <BookOpen className="w-3 h-3" />
+            <span>{track.chapterCount} chapters</span>
+          </div>
+        </div>
+        
+        {/* CTA */}
+        {isActive && (
+          <div className="mt-4 flex items-center text-purple-300 font-semibold group-hover:text-purple-200 transition-colors">
+            <span>Start Learning</span>
+            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  if (isActive) {
+    return (
+      <Link 
+        href="/ebook"
+        className="group animate-fade-in-up"
+        style={{ animationDelay: `${index * 100}ms` }}
+      >
+        {CardContent}
+      </Link>
+    );
+  }
+
+  return (
+    <div 
+      className="group animate-fade-in-up cursor-default"
+      style={{ animationDelay: `${index * 100}ms` }}
+    >
+      {CardContent}
+    </div>
+  );
+}
