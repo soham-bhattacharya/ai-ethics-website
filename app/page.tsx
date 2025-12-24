@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, Bot, GraduationCap, ArrowRight, Sparkles, Zap, LucideIcon, Building2, Landmark, HeartPulse, Users, Clock } from "lucide-react";
+import { BookOpen, Bot, GraduationCap, ArrowRight, Sparkles, Zap, LucideIcon, Building2, Landmark, HeartPulse, Users, Clock, TrendingUp, Shield, Scale, Target, CheckCircle2, AlertTriangle, DollarSign } from "lucide-react";
 import { ebookMetadata } from "@/data/ebook-content";
 import { getAllTracks, LearningTrack } from "@/data/tracks";
 
@@ -9,6 +9,7 @@ const iconMap: Record<string, LucideIcon> = {
   Landmark,
   HeartPulse,
   Users,
+  TrendingUp,
 };
 
 export default function Home() {
@@ -22,36 +23,50 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 backdrop-blur-sm border border-purple-500/30 text-white px-6 py-3 rounded-full text-sm font-semibold mb-8 animate-fade-in shadow-lg">
             <Sparkles className="w-5 h-5 text-yellow-300" />
-            <span>Your Complete AI Ethics Resource</span>
+            <span>Free • Comprehensive • Industry-Specific</span>
             <Sparkles className="w-5 h-5 text-yellow-300" />
           </div>
           
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-8 animate-fade-in-up">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 animate-fade-in-up leading-tight">
             <span className="bg-gradient-to-r from-purple-200 via-pink-200 to-indigo-200 bg-clip-text text-transparent drop-shadow-2xl">
-              AI Ethics Playbook
+              Master AI Ethics
             </span>
+            <br />
+            <span className="text-white">Before It Masters You</span>
           </h1>
           
-          <div className="text-2xl md:text-3xl font-bold text-purple-100 mb-6 animate-fade-in-up delay-100">
-            for Businesses &amp; Professionals
-          </div>
-          
-          <p className="text-xl md:text-2xl text-purple-200/90 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in-up delay-200">
-            Master responsible AI adoption with our comprehensive guide, interactive tools, and AI-powered teaching assistant
+          <p className="text-xl md:text-2xl text-purple-200/90 mb-8 max-w-4xl mx-auto leading-relaxed animate-fade-in-up delay-100">
+            The <span className="font-bold text-white">only free resource</span> offering industry-specific AI ethics training for SMBs, government, healthcare, HR, and finance professionals.
           </p>
+
+          {/* Value Props */}
+          <div className="flex flex-wrap justify-center gap-6 mb-12 animate-fade-in-up delay-200">
+            <div className="flex items-center space-x-2 bg-green-500/10 border border-green-500/30 px-4 py-2 rounded-full">
+              <CheckCircle2 className="w-5 h-5 text-green-400" />
+              <span className="text-green-300 text-sm font-semibold">No login required</span>
+            </div>
+            <div className="flex items-center space-x-2 bg-blue-500/10 border border-blue-500/30 px-4 py-2 rounded-full">
+              <Shield className="w-5 h-5 text-blue-400" />
+              <span className="text-blue-300 text-sm font-semibold">Compliance-focused</span>
+            </div>
+            <div className="flex items-center space-x-2 bg-purple-500/10 border border-purple-500/30 px-4 py-2 rounded-full">
+              <Scale className="w-5 h-5 text-purple-400" />
+              <span className="text-purple-300 text-sm font-semibold">Regulation-aware</span>
+            </div>
+          </div>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in-up delay-300">
             <Link
-              href="/ebook"
+              href="/tracks"
               className="group relative inline-flex items-center space-x-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-10 py-5 rounded-2xl text-lg font-bold hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
             >
-              <BookOpen className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-              <span>Start Reading</span>
+              <Target className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+              <span>Choose Your Track</span>
               <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
               <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity blur"></div>
             </Link>
@@ -61,26 +76,49 @@ export default function Home() {
               className="group inline-flex items-center space-x-3 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white px-10 py-5 rounded-2xl text-lg font-bold hover:bg-white/20 hover:border-white/50 transition-all duration-300 transform hover:scale-105"
             >
               <Bot className="w-6 h-6 group-hover:scale-110 transition-transform" />
-              <span>Ask Virtual TA</span>
+              <span>Ask AI Tutor</span>
             </Link>
           </div>
           
-          <div className="mt-12 flex flex-wrap justify-center gap-8 text-purple-200/80 text-sm animate-fade-in-up delay-400">
-            <div className="flex items-center space-x-2">
+          <div className="mt-12 flex flex-wrap justify-center gap-6 text-purple-200/80 text-sm animate-fade-in-up delay-400">
+            <div className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-full">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span>📖 {ebookMetadata.totalChapters} Chapters</span>
+              <span>5 Learning Tracks</span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-full">
               <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse delay-100"></div>
-              <span>⏱️ {ebookMetadata.estimatedReadingTime}</span>
+              <span>35,000+ Words</span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-full">
               <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse delay-200"></div>
-              <span>✅ 40 Quiz Questions</span>
+              <span>130+ Quiz Questions</span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-full">
               <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse delay-300"></div>
-              <span>🤖 AI-Powered TA</span>
+              <span>AI-Powered Tutor</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why This Matters Section */}
+      <section className="relative py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 animate-fade-in-up">
+              <AlertTriangle className="w-10 h-10 text-red-400 mb-4" />
+              <h3 className="text-xl font-bold text-white mb-2">$175K Average Fine</h3>
+              <p className="text-slate-400 text-sm">For AI-related compliance violations in 2024. One Austin agency paid this for an unvetted lead-scoring tool.</p>
+            </div>
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6 animate-fade-in-up delay-100">
+              <DollarSign className="w-10 h-10 text-amber-400 mb-4" />
+              <h3 className="text-xl font-bold text-white mb-2">$20K Per Violation</h3>
+              <p className="text-slate-400 text-sm">Colorado AI Act penalties take effect Feb 2026. Are you ready?</p>
+            </div>
+            <div className="bg-green-500/10 border border-green-500/20 rounded-2xl p-6 animate-fade-in-up delay-200">
+              <CheckCircle2 className="w-10 h-10 text-green-400 mb-4" />
+              <h3 className="text-xl font-bold text-white mb-2">+15% Revenue Growth</h3>
+              <p className="text-slate-400 text-sm">Companies with strong AI ethics see higher customer loyalty and sustainable growth (McKinsey 2025).</p>
             </div>
           </div>
         </div>
@@ -90,11 +128,15 @@ export default function Home() {
       <section className="relative py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
+            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 backdrop-blur-sm border border-purple-500/30 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <Zap className="w-4 h-4 text-yellow-300" />
+              <span>What&apos;s Included</span>
+            </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Everything You Need to Master AI Ethics
+              Everything You Need. Nothing You Don&apos;t.
             </h2>
-            <p className="text-xl text-purple-200/80">
-              Interactive learning tools designed for small business success
+            <p className="text-xl text-purple-200/80 max-w-3xl mx-auto">
+              No fluff. No jargon. Just actionable frameworks, real compliance guidance, and practical tools you can use today.
             </p>
           </div>
           
@@ -193,22 +235,22 @@ export default function Home() {
 const features = [
   {
     icon: BookOpen,
-    title: "Comprehensive Ebook",
-    description: "8 chapters covering everything from AI fundamentals to practical implementation strategies",
-    href: "/ebook",
+    title: "5 Industry-Specific Tracks",
+    description: "Tailored content for SMBs, government, healthcare, HR, and finance. Real regulations, real case studies, real checklists.",
+    href: "/tracks",
     gradient: "from-purple-500 to-indigo-600"
   },
   {
     icon: Bot,
     title: "AI Teaching Assistant",
-    description: "Get instant, context-aware answers about any chapter with our Gemini-powered Virtual TA",
+    description: "Stuck on a concept? Ask our Gemini-powered tutor anything. Context-aware answers for every module.",
     href: "/virtual-ta",
     gradient: "from-indigo-500 to-blue-600"
   },
   {
     icon: GraduationCap,
-    title: "Interactive Quiz",
-    description: "Test your understanding with 40 curated questions featuring detailed explanations",
+    title: "130+ Quiz Questions",
+    description: "Test your knowledge with chapter-specific quizzes. Detailed explanations help you learn from mistakes.",
     href: "/quiz",
     gradient: "from-blue-500 to-cyan-600"
   }
@@ -253,9 +295,9 @@ function FeatureCard({ icon: Icon, title, description, href, gradient, index }: 
 }
 
 const stats = [
-  { value: "~10K", label: "Words of Content" },
-  { value: "8", label: "Expert Chapters" },
-  { value: "40+", label: "Quiz Questions" }
+  { value: "~35K", label: "Words of Content" },
+  { value: "5", label: "Learning Tracks" },
+  { value: "130+", label: "Quiz Questions" }
 ];
 
 // Track Card Component
@@ -322,9 +364,11 @@ function TrackCard({ track, index }: TrackCardProps) {
   );
 
   if (isActive) {
+    // SMB track goes to /ebook, others go to /tracks/[slug]
+    const href = track.id === "smb" ? "/ebook" : `/tracks/${track.slug}`;
     return (
       <Link 
-        href="/ebook"
+        href={href}
         className="group animate-fade-in-up"
         style={{ animationDelay: `${index * 100}ms` }}
       >

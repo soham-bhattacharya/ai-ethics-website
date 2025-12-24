@@ -1,10 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGeminiClient } from "@/lib/gemini";
 import { chapters } from "@/data/ebook-content";
+import { governmentModules } from "@/data/government-content";
+import { healthcareChapters } from "@/data/healthcare-content";
+import { hrChapters } from "@/data/hr-content";
+import { financeChapters } from "@/data/finance-content";
+
+// Track content mapping
+interface ContentModule {
+  id: number;
+  title: string;
+  content: string;
+}
+
+function getTrackContent(trackId: string): { modules: ContentModule[]; trackName: string } {
+  switch (trackId) {
+    case "government":
+      return { modules: governmentModules, trackName: "AI Policy & Ethics for Government Professionals" };
+    case "healthcare":
+      return { modules: healthcareChapters, trackName: "AI Ethics for Healthcare Professionals" };
+    case "hr":
+      return { modules: hrChapters, trackName: "AI Ethics for HR & Recruitment" };
+    case "finance":
+      return { modules: financeChapters, trackName: "AI Ethics for Financial Services" };
+    case "smb":
+    default:
+      return { modules: chapters, trackName: "AI Ethics Playbook for SMBs" };
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, chapterId } = await request.json();
+    const { message, chapterId, trackId = "smb" } = await request.json();
 
     if (!message) {
       return NextResponse.json(
@@ -13,8 +40,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get the track content
+    const { modules, trackName } = getTrackContent(trackId);
+    
     // Get the chapter content for context
-    const chapter = chapters.find((ch) => ch.id === chapterId);
+    const chapter = modules.find((ch) => ch.id === chapterId);
     if (!chapter) {
       return NextResponse.json(
         { error: "Invalid chapter ID" },
@@ -23,7 +53,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Prepare the system prompt with chapter context
-    const systemPrompt = `You are a helpful Virtual Teaching Assistant (TA) for the "AI Ethics Playbook for SMBs" ebook. You are currently helping a student understand ${chapter.title}.
+    const systemPrompt = `You are a helpful Virtual Teaching Assistant (TA) for the "${trackName}" learning track on AI Ethics Playbook. You are currently helping a student understand ${chapter.title}.
 
 Here is the full content of this chapter:
 

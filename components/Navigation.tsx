@@ -1,31 +1,39 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Bot, GraduationCap, Home } from "lucide-react";
+import { BookOpen, Bot, GraduationCap, Home, Compass, BarChart3, Menu, X } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/ebook", label: "Ebook", icon: BookOpen },
-  { href: "/virtual-ta", label: "Virtual TA", icon: Bot },
+  { href: "/tracks", label: "Tracks", icon: Compass },
+  { href: "/dashboard", label: "Progress", icon: BarChart3 },
+  { href: "/virtual-ta", label: "AI Tutor", icon: Bot },
   { href: "/quiz", label: "Quiz", icon: GraduationCap },
 ];
 
 export default function Navigation() {
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 z-50 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 text-white shadow-2xl border-b border-purple-500/30 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="group flex items-center space-x-3 transform hover:scale-105 transition-all duration-300">
-              <div className="relative w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center backdrop-blur-sm shadow-lg group-hover:shadow-purple-500/50 transform group-hover:rotate-6 transition-all duration-300">
-                <BookOpen className="w-7 h-7 text-white" />
+            <Link 
+              href="/" 
+              className="group flex items-center space-x-3 transform hover:scale-105 transition-all duration-300"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div className="relative w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center backdrop-blur-sm shadow-lg group-hover:shadow-purple-500/50 transform group-hover:rotate-6 transition-all duration-300">
+                <BookOpen className="w-5 h-5 md:w-7 md:h-7 text-white" />
                 <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
               <div className="hidden sm:block">
-                <div className="font-black text-xl bg-gradient-to-r from-purple-200 to-indigo-200 bg-clip-text text-transparent">
+                <div className="font-black text-lg md:text-xl bg-gradient-to-r from-purple-200 to-indigo-200 bg-clip-text text-transparent">
                   AI Ethics Playbook
                 </div>
                 <div className="text-xs text-purple-300 font-semibold">for Professionals</div>
@@ -33,7 +41,8 @@ export default function Navigation() {
             </Link>
           </div>
           
-          <div className="flex space-x-2">
+          {/* Desktop Nav */}
+          <div className="hidden md:flex space-x-2">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
@@ -47,17 +56,78 @@ export default function Navigation() {
                       : "hover:bg-white/10 hover:scale-105"
                   }`}
                 >
-                  <Icon className={`w-5 h-5 ${isActive ? "animate-pulse" : "group-hover:scale-110 transition-transform"}`} />
-                  <span className="hidden md:block">{item.label}</span>
+                  <Icon className={`w-5 h-5 ${isActive ? "" : "group-hover:scale-110 transition-transform"}`} />
+                  <span>{item.label}</span>
                   {isActive && (
-                    <div className="absolute inset-0 bg-white/20 rounded-xl animate-pulse"></div>
+                    <div className="absolute inset-0 bg-white/10 rounded-xl"></div>
                   )}
                 </Link>
               );
             })}
           </div>
+
+          {/* Mobile Nav Icons (visible on small screens) */}
+          <div className="flex md:hidden items-center space-x-1">
+            {navItems.slice(0, 3).map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`relative p-2.5 rounded-lg transition-all duration-300 ${
+                    isActive
+                      ? "bg-gradient-to-r from-purple-600 to-indigo-600 shadow-lg"
+                      : "hover:bg-white/10"
+                  }`}
+                >
+                  <Icon className="w-5 h-5" />
+                </Link>
+              );
+            })}
+            
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2.5 rounded-lg hover:bg-white/10 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-slate-900/95 backdrop-blur-xl border-t border-purple-500/20 animate-fade-in">
+          <div className="px-4 py-4 space-y-2">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                    isActive
+                      ? "bg-gradient-to-r from-purple-600 to-indigo-600 shadow-lg"
+                      : "hover:bg-white/10"
+                  }`}
+                >
+                  <Icon className="w-5 h-5" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

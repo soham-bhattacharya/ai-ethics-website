@@ -1,22 +1,56 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { chapters } from "@/data/ebook-content";
-import { Bot, Send, Loader2, MessageCircle, Sparkles, Brain, Zap, BookOpen } from "lucide-react";
+import { governmentModules } from "@/data/government-content";
+import { healthcareChapters } from "@/data/healthcare-content";
+import { hrChapters } from "@/data/hr-content";
+import { financeChapters } from "@/data/finance-content";
+import { getAllTracks, LearningTrack } from "@/data/tracks";
+import { 
+  Bot, Send, Loader2, MessageCircle, Sparkles, Brain, Zap, BookOpen,
+  Building2, Landmark, HeartPulse, Users, TrendingUp, ChevronLeft, ArrowRight,
+  LucideIcon
+} from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
 }
 
+// Icon mapping
+const iconMap: Record<string, LucideIcon> = {
+  Building2,
+  Landmark,
+  HeartPulse,
+  Users,
+  TrendingUp,
+};
+
+// Get content by track
+function getTrackModules(trackId: string) {
+  switch (trackId) {
+    case "government": return governmentModules;
+    case "healthcare": return healthcareChapters;
+    case "hr": return hrChapters;
+    case "finance": return financeChapters;
+    case "smb":
+    default: return chapters;
+  }
+}
+
 export default function VirtualTAPage() {
+  const [selectedTrack, setSelectedTrack] = useState<string | null>(null);
   const [selectedChapter, setSelectedChapter] = useState<number | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const tracks = getAllTracks().filter(t => t.isActive);
+
   const handleSendMessage = async () => {
-    if (!input.trim() || isLoading || selectedChapter === null) return;
+    if (!input.trim() || isLoading || selectedChapter === null || selectedTrack === null) return;
 
     const userMessage: Message = { role: "user", content: input };
     setMessages(prev => [...prev, userMessage]);
@@ -30,6 +64,7 @@ export default function VirtualTAPage() {
         body: JSON.stringify({
           message: input,
           chapterId: selectedChapter,
+          trackId: selectedTrack,
         }),
       });
 
@@ -63,7 +98,17 @@ export default function VirtualTAPage() {
     }
   };
 
-  if (selectedChapter === null) {
+  const handleBack = () => {
+    if (selectedChapter !== null) {
+      setSelectedChapter(null);
+      setMessages([]);
+    } else {
+      setSelectedTrack(null);
+    }
+  };
+
+  // Track selection view
+  if (selectedTrack === null) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 py-12 px-4 relative overflow-hidden">
         {/* Animated background */}
@@ -83,33 +128,37 @@ export default function VirtualTAPage() {
               Ask Me Anything
             </h1>
             <p className="text-xl text-cyan-200/90 max-w-2xl mx-auto leading-relaxed">
-              Select a chapter and chat with our AI-powered teaching assistant to deepen your understanding.
+              Select a learning track to get started with your AI-powered study companion.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {chapters.map((chapter, index) => {
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tracks.map((track, index) => {
+              const Icon = iconMap[track.icon] || Building2;
               return (
                 <button
-                  key={chapter.id}
-                  onClick={() => setSelectedChapter(chapter.id)}
-                  className="group relative animate-fade-in-up"
+                  key={track.id}
+                  onClick={() => setSelectedTrack(track.id)}
+                  className="group relative animate-fade-in-up text-left"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-3xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
-                  <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:border-white/30 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${track.color} rounded-3xl blur-xl opacity-30 group-hover:opacity-60 transition-opacity duration-300`}></div>
+                  <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:border-white/30 transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-2 h-full">
                     <div className="flex items-start justify-between mb-4">
-                      <div className="text-sm text-cyan-300 font-bold bg-cyan-500/20 px-4 py-2 rounded-full border border-cyan-400/30">
-                        {chapter.id === 0 ? "Introduction" : chapter.id === chapters.length - 1 ? "Conclusion" : `Chapter ${chapter.id}`}
+                      <div className={`w-14 h-14 bg-gradient-to-br ${track.color} rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform`}>
+                        <Icon className="w-7 h-7 text-white" />
                       </div>
-                      <MessageCircle className="w-6 h-6 text-blue-400 group-hover:scale-110 transition-transform duration-300" />
+                      <MessageCircle className="w-6 h-6 text-cyan-400 group-hover:scale-110 transition-transform duration-300" />
                     </div>
-                    <h3 className="text-2xl font-black text-white mb-3 group-hover:text-cyan-200 transition-colors">
-                      {chapter.title.replace(/^(Introduction: |Chapter \d+: |Conclusion)/, "")}
+                    <h3 className="text-xl font-black text-white mb-2 group-hover:text-cyan-200 transition-colors">
+                      {track.shortTitle}
                     </h3>
+                    <p className="text-sm text-slate-400 mb-4 line-clamp-2">
+                      {track.description}
+                    </p>
                     <div className="flex items-center space-x-2 text-cyan-300">
-                      <Sparkles className="w-4 h-4" />
-                      <span className="text-sm font-semibold">{Math.round(chapter.wordCount / 200)} min read</span>
+                      <BookOpen className="w-4 h-4" />
+                      <span className="text-sm font-semibold">{track.chapterCount} modules</span>
                     </div>
                   </div>
                 </button>
@@ -120,6 +169,82 @@ export default function VirtualTAPage() {
       </div>
     );
   }
+
+  // Chapter selection view
+  const currentTrack = tracks.find(t => t.id === selectedTrack)!;
+  const trackModules = getTrackModules(selectedTrack);
+  const TrackIcon = iconMap[currentTrack.icon] || Building2;
+
+  if (selectedChapter === null) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 py-12 px-4 relative overflow-hidden">
+        {/* Animated background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-12">
+            <button
+              onClick={handleBack}
+              className="flex items-center space-x-2 text-cyan-300 hover:text-white transition-colors"
+            >
+              <ChevronLeft className="w-5 h-5" />
+              <span className="font-semibold">All Tracks</span>
+            </button>
+            <div className="flex items-center space-x-3">
+              <div className={`w-10 h-10 bg-gradient-to-br ${currentTrack.color} rounded-xl flex items-center justify-center`}>
+                <TrackIcon className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-bold text-white">{currentTrack.shortTitle}</span>
+            </div>
+          </div>
+
+          <div className="text-center mb-12 animate-fade-in-up">
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
+              Select a Module
+            </h1>
+            <p className="text-lg text-cyan-200/80 max-w-2xl mx-auto">
+              Choose a module to discuss with your AI teaching assistant.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {trackModules.map((module, index) => (
+              <button
+                key={module.id}
+                onClick={() => setSelectedChapter(module.id)}
+                className="group relative animate-fade-in-up text-left"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <div className={`absolute inset-0 bg-gradient-to-r ${currentTrack.color} rounded-3xl blur-xl opacity-30 group-hover:opacity-60 transition-opacity duration-300`}></div>
+                <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:border-white/30 transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-2">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="text-sm text-cyan-300 font-bold bg-cyan-500/20 px-4 py-2 rounded-full border border-cyan-400/30">
+                      {index === 0 ? "Introduction" : `Module ${index}`}
+                    </div>
+                    <MessageCircle className="w-6 h-6 text-cyan-400 group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  <h3 className="text-xl font-black text-white mb-3 group-hover:text-cyan-200 transition-colors line-clamp-2">
+                    {module.title.replace(/^(Introduction: |Module \d+: |Chapter \d+: )/, "")}
+                  </h3>
+                  <div className="flex items-center space-x-2 text-cyan-300">
+                    <Sparkles className="w-4 h-4" />
+                    <span className="text-sm font-semibold">{Math.round(module.wordCount / 200)} min read</span>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Chat view
+  const currentModule = trackModules.find(m => m.id === selectedChapter)!;
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 flex flex-col relative overflow-hidden">
@@ -134,33 +259,32 @@ export default function VirtualTAPage() {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => {
-                setSelectedChapter(null);
-                setMessages([]);
-              }}
+              onClick={handleBack}
               className="text-cyan-300 hover:text-cyan-100 flex items-center space-x-2 font-semibold transition-colors"
             >
-              <span>← Back to chapters</span>
+              <ChevronLeft className="w-5 h-5" />
+              <span>Back to modules</span>
             </button>
             
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/50">
                 <Bot className="w-6 h-6 text-white animate-pulse" />
               </div>
-              <div>
-                <div className="text-sm text-cyan-300 font-semibold">Virtual TA</div>
-                <h1 className="text-xl font-black text-white">
-                  {chapters[selectedChapter].title}
+              <div className="hidden sm:block">
+                <div className="text-sm text-cyan-300 font-semibold">{currentTrack.shortTitle}</div>
+                <h1 className="text-lg font-bold text-white line-clamp-1 max-w-xs">
+                  {currentModule.title.replace(/^(Introduction: |Module \d+: |Chapter \d+: )/, "")}
                 </h1>
               </div>
             </div>
 
-            <div className="flex items-center space-x-2 bg-cyan-500/20 backdrop-blur-sm border border-cyan-400/30 px-4 py-2 rounded-full">
+            <Link 
+              href={selectedTrack === "smb" ? "/ebook" : `/tracks/${selectedTrack}`}
+              className="flex items-center space-x-2 bg-cyan-500/20 backdrop-blur-sm border border-cyan-400/30 px-4 py-2 rounded-full hover:bg-cyan-500/30 transition-colors"
+            >
               <BookOpen className="w-5 h-5 text-cyan-300" />
-              <span className="text-sm font-semibold text-cyan-300">
-                {chapters[selectedChapter]?.id === 0 ? "Introduction" : chapters[selectedChapter]?.id === chapters.length - 1 ? "Conclusion" : `Chapter ${chapters[selectedChapter]?.id}`}
-              </span>
-            </div>
+              <span className="text-sm font-semibold text-cyan-300 hidden sm:inline">Read Content</span>
+            </Link>
           </div>
         </div>
       </div>
@@ -174,13 +298,13 @@ export default function VirtualTAPage() {
                 <Brain className="w-12 h-12 text-white animate-pulse" />
               </div>
               <h2 className="text-3xl font-black text-white mb-4">Ready to Help!</h2>
-              <p className="text-lg text-cyan-200/80 max-w-lg mx-auto leading-relaxed">
-                Ask me anything about <span className="font-bold text-cyan-300">{chapters[selectedChapter].title}</span>. I&apos;m here to help you understand the concepts better.
+              <p className="text-lg text-cyan-200/80 max-w-lg mx-auto leading-relaxed mb-8">
+                Ask me anything about this module. I&apos;m here to help you understand the concepts better.
               </p>
               
-              <div className="grid md:grid-cols-3 gap-4 mt-12 max-w-3xl mx-auto">
+              <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
                 <button
-                  onClick={() => setInput("Can you summarize the key points of this chapter?")}
+                  onClick={() => setInput("Can you summarize the key points?")}
                   className="group relative"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
@@ -191,24 +315,24 @@ export default function VirtualTAPage() {
                 </button>
                 
                 <button
-                  onClick={() => setInput("What are the main challenges discussed?")}
+                  onClick={() => setInput("What are the practical applications?")}
                   className="group relative"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
                   <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-cyan-500/50 transition-all duration-300">
                     <Brain className="w-8 h-8 text-cyan-400 mb-3" />
-                    <p className="text-sm text-white font-semibold">Main challenges</p>
+                    <p className="text-sm text-white font-semibold">Practical applications</p>
                   </div>
                 </button>
                 
                 <button
-                  onClick={() => setInput("Can you give me practical examples?")}
+                  onClick={() => setInput("Give me a real-world example")}
                   className="group relative"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
                   <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-cyan-500/50 transition-all duration-300">
                     <Sparkles className="w-8 h-8 text-cyan-400 mb-3" />
-                    <p className="text-sm text-white font-semibold">Practical examples</p>
+                    <p className="text-sm text-white font-semibold">Real-world examples</p>
                   </div>
                 </button>
               </div>
@@ -282,7 +406,7 @@ export default function VirtualTAPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask a question about this chapter..."
+                placeholder="Ask a question about this module..."
                 className="flex-1 bg-transparent text-white placeholder-cyan-300/50 outline-none resize-none text-lg max-h-40 font-medium focus:placeholder-cyan-300/30 transition-colors"
                 rows={1}
               />
