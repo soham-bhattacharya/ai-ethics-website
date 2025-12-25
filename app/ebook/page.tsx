@@ -47,8 +47,8 @@ export default function EbookPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Sleek Top Progress Bar */}
-      <div className="fixed top-16 left-0 right-0 z-50">
+      {/* Sleek Top Progress Bar - positioned below navigation */}
+      <div className="fixed top-16 md:top-20 left-0 right-0 z-40">
         <div className="relative h-1 bg-slate-700/50 backdrop-blur-sm">
           <div
             className="absolute top-0 left-0 h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-500 transition-all duration-300 shadow-lg shadow-purple-500/50"
@@ -86,12 +86,12 @@ export default function EbookPage() {
         </div>
       </div>
 
-      <div className="pt-28 pb-12 px-4 sm:px-6 lg:px-8">
+      <div className="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-12 gap-8">
             {/* Sidebar */}
             <div className={`lg:col-span-3 ${sidebarOpen ? 'block' : 'hidden'} lg:block`}>
-              <div className="sticky top-32">
+              <div className="sticky top-32 md:top-36">
                 {/* Overall Progress */}
                 <div className="relative mb-6 animate-fade-in-up">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl blur-xl opacity-50"></div>

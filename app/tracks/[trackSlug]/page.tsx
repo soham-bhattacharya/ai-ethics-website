@@ -283,8 +283,8 @@ export default function TrackPage({ params }: TrackPageProps) {
         <div className={`absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse delay-1000`}></div>
       </div>
 
-      {/* Progress Bar */}
-      <div className="fixed top-16 left-0 right-0 z-50">
+      {/* Progress Bar - positioned below navigation */}
+      <div className="fixed top-16 md:top-20 left-0 right-0 z-40">
         <div className="relative h-1 bg-slate-700/50 backdrop-blur-sm">
           <div
             className={`absolute top-0 left-0 h-full bg-gradient-to-r ${colors.gradient} transition-all duration-300 ${colors.shadow}`}
@@ -328,12 +328,12 @@ export default function TrackPage({ params }: TrackPageProps) {
         </div>
       </div>
 
-      <div className="pt-28 pb-12 px-4 sm:px-6 lg:px-8">
+      <div className="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-12 gap-8">
             {/* Sidebar */}
             <div className={`lg:col-span-3 ${sidebarOpen ? 'block' : 'hidden'} lg:block`}>
-              <div className="sticky top-32">
+              <div className="sticky top-32 md:top-36">
                 {/* Track Info Card */}
                 <div className="relative mb-6 animate-fade-in-up group">
                   <div className={`absolute inset-0 bg-gradient-to-r ${colors.gradient} rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity duration-500`}></div>
