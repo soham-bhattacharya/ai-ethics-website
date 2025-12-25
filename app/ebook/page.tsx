@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { chapters } from "@/data/ebook-content";
+import { updateModuleProgress } from "@/lib/progress";
 import { ChevronLeft, ChevronRight, BookOpen, Clock, CheckCircle, Menu } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -18,11 +19,18 @@ export default function EbookPage() {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight - windowHeight;
       const scrolled = window.scrollY;
-      const progress = (scrolled / documentHeight) * 100;
+      const progress = documentHeight > 0 ? (scrolled / documentHeight) * 100 : 0;
+      const roundedProgress = Math.min(Math.round(progress), 100);
       
       const newProgress = [...readProgress];
-      newProgress[currentChapter] = Math.min(Math.round(progress), 100);
+      newProgress[currentChapter] = roundedProgress;
       setReadProgress(newProgress);
+      
+      // Save progress to localStorage at 10% intervals or at completion
+      const currentSaved = readProgress[currentChapter] || 0;
+      if (roundedProgress > currentSaved && (roundedProgress % 10 === 0 || roundedProgress >= 95)) {
+        updateModuleProgress('smb', chapters[currentChapter].id, roundedProgress);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);

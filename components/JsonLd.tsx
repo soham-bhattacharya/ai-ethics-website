@@ -48,29 +48,61 @@ export function CourseJsonLd() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Course",
-    name: "AI Ethics Playbook for Businesses",
-    description: "A comprehensive, free course on AI ethics covering bias prevention, compliance, governance, and practical implementation strategies.",
+    name: "AI Ethics Playbook for Professionals",
+    description: "Comprehensive AI ethics training covering industry-specific compliance, bias prevention, governance frameworks, and practical implementation strategies for SMBs, government, healthcare, HR, and financial services.",
     provider: {
       "@type": "Organization",
       name: "AI Ethics Playbook",
       url: siteUrl,
     },
     educationalLevel: "Beginner to Intermediate",
-    isAccessibleForFree: true,
-    hasCourseInstance: {
-      "@type": "CourseInstance",
-      courseMode: "online",
-      courseWorkload: "PT45M",
-    },
+    hasCourseInstance: [
+      {
+        "@type": "CourseInstance",
+        name: "SMB Track",
+        courseMode: "online",
+        courseWorkload: "PT60M",
+      },
+      {
+        "@type": "CourseInstance",
+        name: "Government Track",
+        courseMode: "online",
+        courseWorkload: "PT90M",
+      },
+      {
+        "@type": "CourseInstance",
+        name: "Healthcare Track",
+        courseMode: "online",
+        courseWorkload: "PT85M",
+      },
+      {
+        "@type": "CourseInstance",
+        name: "HR/Recruitment Track",
+        courseMode: "online",
+        courseWorkload: "PT70M",
+      },
+      {
+        "@type": "CourseInstance",
+        name: "Finance Track",
+        courseMode: "online",
+        courseWorkload: "PT70M",
+      }
+    ],
     teaches: [
       "AI Ethics Principles",
       "Bias Detection and Prevention",
       "AI Compliance and Governance",
+      "HIPAA AI Compliance",
+      "Fair Lending and ECOA",
+      "AEDT Compliance",
+      "State AI Legislation Analysis",
       "Risk Assessment Frameworks",
       "Practical AI Implementation",
     ],
-    numberOfCredits: 0,
-    occupationalCredentialAwarded: "Certificate of Completion (coming soon)",
+    audience: {
+      "@type": "Audience",
+      audienceType: "Business professionals, government workers, healthcare administrators, HR professionals, financial analysts"
+    }
   };
 
   return (
@@ -88,16 +120,20 @@ export function FAQJsonLd() {
       answer: "AI ethics is a set of principles and practices that guide the responsible development and use of artificial intelligence. It covers fairness, transparency, accountability, privacy, safety, and human-centric design.",
     },
     {
-      question: "Why do SMBs need AI ethics?",
-      answer: "SMBs face unique risks including legal exposure (EU AI Act, CCPA), reputational damage from AI failures, and customer trust issues. A single ethical incident can significantly impact a small business.",
+      question: "Why do businesses need AI ethics training?",
+      answer: "Businesses face significant risks including legal exposure (EU AI Act, Colorado AI Act, CCPA), reputational damage from AI failures, and customer trust issues. Proper AI ethics training helps organizations implement AI responsibly and avoid costly mistakes.",
     },
     {
-      question: "How long does it take to complete the AI Ethics Playbook?",
-      answer: "The complete ebook takes approximately 45 minutes to read. The 40 quiz questions can be completed in about 20 minutes. The Virtual TA is available for instant answers anytime.",
+      question: "What learning tracks are available?",
+      answer: "We offer 5 specialized learning tracks: SMB (small business), Government/Policy, Healthcare, HR/Recruitment, and Financial Services. Each track provides industry-specific guidance, case studies, and compliance frameworks.",
     },
     {
-      question: "Is this resource free?",
-      answer: "Yes, the AI Ethics Playbook, including the ebook, quizzes, and AI-powered Virtual Teaching Assistant, is completely free to use.",
+      question: "How long does it take to complete a learning track?",
+      answer: "Track completion times vary: SMB (60 min), Government (90 min), Healthcare (85 min), HR (70 min), and Finance (70 min). Each track includes comprehensive reading materials and assessment quizzes.",
+    },
+    {
+      question: "What makes AI Ethics Playbook different from other resources?",
+      answer: "We provide industry-specific, practical guidance rather than abstract theory. Our tracks cover real regulations (AEDT, HIPAA, ECOA), include actual case studies, and offer implementation templates you can use immediately.",
     },
   ];
 

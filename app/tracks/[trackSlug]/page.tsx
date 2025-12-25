@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, use, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getTrackBySlug, LearningTrack } from "@/data/tracks";
@@ -8,6 +8,7 @@ import { governmentModules } from "@/data/government-content";
 import { healthcareChapters } from "@/data/healthcare-content";
 import { hrChapters } from "@/data/hr-content";
 import { financeChapters } from "@/data/finance-content";
+import { updateModuleProgress } from "@/lib/progress";
 import { 
   ChevronLeft, ChevronRight, BookOpen, Clock, CheckCircle, Menu,
   Building2, Landmark, HeartPulse, Users, Home, GraduationCap, ArrowRight,
@@ -31,70 +32,65 @@ const IndustryPattern = ({ trackSlug }: { trackSlug: string }) => {
   switch (trackSlug) {
     case "government":
       return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-          {/* Grid pattern for government - structure and order */}
-          <div className="absolute inset-0" style={{
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30 -z-10">
+          <div className="absolute inset-0 pointer-events-none" style={{
             backgroundImage: `
               linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
               linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
             `,
             backgroundSize: '40px 40px'
           }}></div>
-          {/* Floating civic symbols */}
-          <div className="absolute top-20 right-20 opacity-20">
+          <div className="absolute top-20 right-20 opacity-20 pointer-events-none">
             <Shield className="w-32 h-32 text-blue-400 animate-float" />
           </div>
-          <div className="absolute bottom-40 left-10 opacity-15">
+          <div className="absolute bottom-40 left-10 opacity-15 pointer-events-none">
             <Scale className="w-24 h-24 text-cyan-400 animate-float delay-1000" />
           </div>
         </div>
       );
     case "healthcare":
       return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-          {/* Pulse pattern for healthcare */}
-          <div className="absolute inset-0">
-            <svg className="w-full h-full opacity-10" viewBox="0 0 100 20" preserveAspectRatio="none">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30 -z-10">
+          <div className="absolute inset-0 pointer-events-none">
+            <svg className="w-full h-full opacity-10 pointer-events-none" viewBox="0 0 100 20" preserveAspectRatio="none">
               <path d="M0,10 L20,10 L25,2 L30,18 L35,10 L100,10" fill="none" stroke="rgba(236, 72, 153, 0.4)" strokeWidth="0.5" />
             </svg>
           </div>
-          <div className="absolute top-32 right-16 opacity-20">
+          <div className="absolute top-32 right-16 opacity-20 pointer-events-none">
             <HeartPulse className="w-40 h-40 text-rose-400 animate-pulse" />
           </div>
         </div>
       );
     case "hr":
       return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-          {/* Connected dots pattern for HR - networks and people */}
-          <div className="absolute top-20 left-1/4">
-            <div className="relative">
-              <div className="w-3 h-3 bg-amber-400/30 rounded-full"></div>
-              <div className="absolute top-0 left-6 w-3 h-3 bg-amber-400/20 rounded-full"></div>
-              <div className="absolute top-6 left-3 w-3 h-3 bg-amber-400/25 rounded-full"></div>
-              <svg className="absolute top-1.5 left-1.5 w-12 h-12 opacity-30">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30 -z-10">
+          <div className="absolute top-20 left-1/4 pointer-events-none">
+            <div className="relative pointer-events-none">
+              <div className="w-3 h-3 bg-amber-400/30 rounded-full pointer-events-none"></div>
+              <div className="absolute top-0 left-6 w-3 h-3 bg-amber-400/20 rounded-full pointer-events-none"></div>
+              <div className="absolute top-6 left-3 w-3 h-3 bg-amber-400/25 rounded-full pointer-events-none"></div>
+              <svg className="absolute top-1.5 left-1.5 w-12 h-12 opacity-30 pointer-events-none">
                 <line x1="0" y1="0" x2="24" y2="0" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
                 <line x1="0" y1="0" x2="12" y2="24" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
                 <line x1="24" y1="0" x2="12" y2="24" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
               </svg>
             </div>
           </div>
-          <div className="absolute bottom-32 right-20 opacity-20">
+          <div className="absolute bottom-32 right-20 opacity-20 pointer-events-none">
             <Users className="w-32 h-32 text-amber-400 animate-float" />
           </div>
         </div>
       );
     case "finance":
       return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-          {/* Ascending bars pattern for finance */}
-          <div className="absolute bottom-0 left-1/4 flex items-end space-x-2 opacity-20">
-            <div className="w-4 h-12 bg-gradient-to-t from-emerald-500/30 to-transparent rounded-t animate-pulse"></div>
-            <div className="w-4 h-20 bg-gradient-to-t from-emerald-500/40 to-transparent rounded-t animate-pulse delay-100"></div>
-            <div className="w-4 h-16 bg-gradient-to-t from-emerald-500/35 to-transparent rounded-t animate-pulse delay-200"></div>
-            <div className="w-4 h-28 bg-gradient-to-t from-emerald-500/50 to-transparent rounded-t animate-pulse delay-300"></div>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30 -z-10">
+          <div className="absolute bottom-0 left-1/4 flex items-end space-x-2 opacity-20 pointer-events-none">
+            <div className="w-4 h-12 bg-gradient-to-t from-emerald-500/30 to-transparent rounded-t animate-pulse pointer-events-none"></div>
+            <div className="w-4 h-20 bg-gradient-to-t from-emerald-500/40 to-transparent rounded-t animate-pulse delay-100 pointer-events-none"></div>
+            <div className="w-4 h-16 bg-gradient-to-t from-emerald-500/35 to-transparent rounded-t animate-pulse delay-200 pointer-events-none"></div>
+            <div className="w-4 h-28 bg-gradient-to-t from-emerald-500/50 to-transparent rounded-t animate-pulse delay-300 pointer-events-none"></div>
           </div>
-          <div className="absolute top-40 right-16 opacity-20">
+          <div className="absolute top-40 right-16 opacity-20 pointer-events-none">
             <TrendingUp className="w-36 h-36 text-emerald-400 animate-float" />
           </div>
         </div>
@@ -152,23 +148,32 @@ export default function TrackPage({ params }: TrackPageProps) {
     }
   }, [content]);
 
+  // Save progress when scrolling
   useEffect(() => {
-    if (!content) return;
+    if (!content || !track) return;
+    const mods = content.modules;
 
     const handleScroll = () => {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight - windowHeight;
       const scrolled = window.scrollY;
       const progress = documentHeight > 0 ? (scrolled / documentHeight) * 100 : 0;
+      const roundedProgress = Math.min(Math.round(progress), 100);
       
       const newProgress = [...readProgress];
-      newProgress[currentModule] = Math.min(Math.round(progress), 100);
+      newProgress[currentModule] = roundedProgress;
       setReadProgress(newProgress);
+      
+      // Save progress to localStorage (at 10% intervals or at 100%)
+      const currentSaved = readProgress[currentModule] || 0;
+      if (roundedProgress > currentSaved && (roundedProgress % 10 === 0 || roundedProgress >= 95)) {
+        updateModuleProgress(track.id, mods[currentModule].id, roundedProgress);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [currentModule, readProgress, content]);
+  }, [currentModule, readProgress, content, track]);
 
   // Handle invalid track
   if (!track || !content) {
@@ -277,10 +282,10 @@ export default function TrackPage({ params }: TrackPageProps) {
       {/* Industry-specific decorative pattern */}
       <IndustryPattern trackSlug={trackSlug} />
       
-      {/* Animated background orbs - track specific colors */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className={`absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse`}></div>
-        <div className={`absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse delay-1000`}></div>
+      {/* Animated background orbs - track specific colors - all children must have pointer-events-none */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div className={`absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse pointer-events-none`}></div>
+        <div className={`absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse delay-1000 pointer-events-none`}></div>
       </div>
 
       {/* Progress Bar - positioned below navigation */}

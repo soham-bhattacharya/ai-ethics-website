@@ -18,7 +18,7 @@ export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-[60] bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 text-white shadow-2xl border-b border-purple-500/30 backdrop-blur-xl">
+    <nav className="sticky top-0 z-[100] isolate bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 text-white shadow-2xl border-b border-purple-500/30 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -50,16 +50,19 @@ export default function Navigation() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`group relative flex items-center space-x-2 px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                  className={`group relative flex items-center space-x-2 px-4 py-3 rounded-xl font-semibold transition-all duration-300 overflow-hidden ${
                     isActive
                       ? "bg-gradient-to-r from-purple-600 to-indigo-600 shadow-lg shadow-purple-500/50 scale-105"
                       : "hover:bg-white/10 hover:scale-105"
                   }`}
                 >
-                  <Icon className={`w-5 h-5 ${isActive ? "" : "group-hover:scale-110 transition-transform"}`} />
-                  <span>{item.label}</span>
+                  <Icon className={`w-5 h-5 ${isActive ? "" : "group-hover:scale-110 group-hover:rotate-6 transition-all duration-300"}`} />
+                  <span className="relative z-10">{item.label}</span>
                   {isActive && (
                     <div className="absolute inset-0 bg-white/10 rounded-xl"></div>
+                  )}
+                  {!isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600/0 to-indigo-600/0 group-hover:from-purple-600/20 group-hover:to-indigo-600/20 transition-all duration-300 rounded-xl"></div>
                   )}
                 </Link>
               );

@@ -28,7 +28,7 @@ export default function Home() {
               {/* Badge */}
               <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500/10 to-indigo-500/10 backdrop-blur-sm border border-purple-500/20 text-white px-4 py-2 rounded-full text-sm font-medium mb-8 animate-fade-in">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-purple-200">Free & Comprehensive Learning Platform</span>
+                <span className="text-purple-200">Industry-Specific AI Ethics Training</span>
               </div>
               
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 animate-fade-in-up leading-[1.1] tracking-tight">
@@ -42,7 +42,7 @@ export default function Home() {
               </h1>
               
               <p className="text-lg sm:text-xl text-slate-400 mb-8 max-w-xl leading-relaxed animate-fade-in-up delay-100">
-                Industry-specific training on AI ethics and compliance. Five learning tracks, 130+ quiz questions, and an AI tutor—all free, no login required.
+                Industry-specific training on AI ethics and compliance. Five specialized learning tracks, 130+ quiz questions, and an AI-powered tutor to guide your journey.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-10 animate-fade-in-up delay-200">
@@ -314,9 +314,9 @@ const features = [
   },
   {
     icon: Award,
-    title: "Always Free",
-    description: "No paywall, no login, no tracking. Just open the site and start learning. Share with your team.",
-    href: "/tracks",
+    title: "Progress Tracking",
+    description: "Track your learning journey with achievements, completion certificates, and quiz scores across all tracks.",
+    href: "/dashboard",
     color: "emerald"
   }
 ];

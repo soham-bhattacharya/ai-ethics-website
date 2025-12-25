@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, use } from "react";
+import { useState, use, useEffect } from "react";
 import Link from "next/link";
 import { getTrackBySlug } from "@/data/tracks";
 import { governmentQuizzes } from "@/data/government-quizzes";
@@ -11,6 +11,7 @@ import { governmentModules } from "@/data/government-content";
 import { healthcareChapters } from "@/data/healthcare-content";
 import { hrChapters } from "@/data/hr-content";
 import { financeChapters } from "@/data/finance-content";
+import { updateQuizScore } from "@/lib/progress";
 import {
   ChevronLeft, ChevronRight, BookOpen, CheckCircle, XCircle,
   Trophy, Target, Zap, RotateCcw, Home, Building2, Landmark, HeartPulse, Users,
@@ -168,6 +169,11 @@ export default function TrackQuizPage({ params }: QuizPageProps) {
       setSelectedAnswer(null);
       setIsAnswered(false);
     } else {
+      // Save quiz score to progress when completed
+      const finalScore = selectedAnswer === moduleQuizzes[currentQuestion].correctAnswer ? score + 1 : score;
+      if (selectedModule !== null) {
+        updateQuizScore(trackSlug, selectedModule, finalScore, moduleQuizzes.length);
+      }
       setShowResults(true);
     }
   };
