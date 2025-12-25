@@ -204,13 +204,13 @@ export default function TrackQuizPage({ params }: QuizPageProps) {
   if (selectedModule === null) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
-        {/* Animated background */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {/* Animated background - must use negative z-index */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: -1 }}>
           <div className={`absolute top-20 left-10 w-72 h-72 ${colors.bgLight} rounded-full blur-3xl animate-pulse`}></div>
           <div className={`absolute bottom-20 right-10 w-96 h-96 ${colors.bgLight} rounded-full blur-3xl animate-pulse delay-1000`}></div>
         </div>
 
-        <div className="max-w-6xl mx-auto relative">
+        <div className="max-w-6xl mx-auto relative z-10">
           {/* Header */}
           <div className="text-center mb-12">
             <Link 
@@ -297,9 +297,9 @@ export default function TrackQuizPage({ params }: QuizPageProps) {
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        {/* Celebration particles for good scores */}
+        {/* Celebration particles for good scores - use negative z-index */}
         {passed && (
-          <div className="fixed inset-0 pointer-events-none overflow-hidden">
+          <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: -1 }}>
             {[...Array(20)].map((_, i) => (
               <div
                 key={i}

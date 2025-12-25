@@ -27,70 +27,70 @@ const iconMap: Record<string, LucideIcon> = {
   TrendingUp,
 };
 
-// Industry-specific decorative patterns
+// Industry-specific decorative patterns (rendered inside a fixed pointer-events-none container)
 const IndustryPattern = ({ trackSlug }: { trackSlug: string }) => {
   switch (trackSlug) {
     case "government":
       return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30 -z-10">
-          <div className="absolute inset-0 pointer-events-none" style={{
+        <div className="absolute inset-0 overflow-hidden opacity-30">
+          <div className="absolute inset-0" style={{
             backgroundImage: `
               linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
               linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
             `,
             backgroundSize: '40px 40px'
           }}></div>
-          <div className="absolute top-20 right-20 opacity-20 pointer-events-none">
+          <div className="absolute top-20 right-20 opacity-20">
             <Shield className="w-32 h-32 text-blue-400 animate-float" />
           </div>
-          <div className="absolute bottom-40 left-10 opacity-15 pointer-events-none">
+          <div className="absolute bottom-40 left-10 opacity-15">
             <Scale className="w-24 h-24 text-cyan-400 animate-float delay-1000" />
           </div>
         </div>
       );
     case "healthcare":
       return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30 -z-10">
-          <div className="absolute inset-0 pointer-events-none">
-            <svg className="w-full h-full opacity-10 pointer-events-none" viewBox="0 0 100 20" preserveAspectRatio="none">
+        <div className="absolute inset-0 overflow-hidden opacity-30">
+          <div className="absolute inset-0">
+            <svg className="w-full h-full opacity-10" viewBox="0 0 100 20" preserveAspectRatio="none">
               <path d="M0,10 L20,10 L25,2 L30,18 L35,10 L100,10" fill="none" stroke="rgba(236, 72, 153, 0.4)" strokeWidth="0.5" />
             </svg>
           </div>
-          <div className="absolute top-32 right-16 opacity-20 pointer-events-none">
+          <div className="absolute top-32 right-16 opacity-20">
             <HeartPulse className="w-40 h-40 text-rose-400 animate-pulse" />
           </div>
         </div>
       );
     case "hr":
       return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30 -z-10">
-          <div className="absolute top-20 left-1/4 pointer-events-none">
-            <div className="relative pointer-events-none">
-              <div className="w-3 h-3 bg-amber-400/30 rounded-full pointer-events-none"></div>
-              <div className="absolute top-0 left-6 w-3 h-3 bg-amber-400/20 rounded-full pointer-events-none"></div>
-              <div className="absolute top-6 left-3 w-3 h-3 bg-amber-400/25 rounded-full pointer-events-none"></div>
-              <svg className="absolute top-1.5 left-1.5 w-12 h-12 opacity-30 pointer-events-none">
+        <div className="absolute inset-0 overflow-hidden opacity-30">
+          <div className="absolute top-20 left-1/4">
+            <div className="relative">
+              <div className="w-3 h-3 bg-amber-400/30 rounded-full"></div>
+              <div className="absolute top-0 left-6 w-3 h-3 bg-amber-400/20 rounded-full"></div>
+              <div className="absolute top-6 left-3 w-3 h-3 bg-amber-400/25 rounded-full"></div>
+              <svg className="absolute top-1.5 left-1.5 w-12 h-12 opacity-30">
                 <line x1="0" y1="0" x2="24" y2="0" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
                 <line x1="0" y1="0" x2="12" y2="24" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
                 <line x1="24" y1="0" x2="12" y2="24" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
               </svg>
             </div>
           </div>
-          <div className="absolute bottom-32 right-20 opacity-20 pointer-events-none">
+          <div className="absolute bottom-32 right-20 opacity-20">
             <Users className="w-32 h-32 text-amber-400 animate-float" />
           </div>
         </div>
       );
     case "finance":
       return (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30 -z-10">
-          <div className="absolute bottom-0 left-1/4 flex items-end space-x-2 opacity-20 pointer-events-none">
-            <div className="w-4 h-12 bg-gradient-to-t from-emerald-500/30 to-transparent rounded-t animate-pulse pointer-events-none"></div>
-            <div className="w-4 h-20 bg-gradient-to-t from-emerald-500/40 to-transparent rounded-t animate-pulse delay-100 pointer-events-none"></div>
-            <div className="w-4 h-16 bg-gradient-to-t from-emerald-500/35 to-transparent rounded-t animate-pulse delay-200 pointer-events-none"></div>
-            <div className="w-4 h-28 bg-gradient-to-t from-emerald-500/50 to-transparent rounded-t animate-pulse delay-300 pointer-events-none"></div>
+        <div className="absolute inset-0 overflow-hidden opacity-30">
+          <div className="absolute bottom-0 left-1/4 flex items-end space-x-2 opacity-20">
+            <div className="w-4 h-12 bg-gradient-to-t from-emerald-500/30 to-transparent rounded-t animate-pulse"></div>
+            <div className="w-4 h-20 bg-gradient-to-t from-emerald-500/40 to-transparent rounded-t animate-pulse delay-100"></div>
+            <div className="w-4 h-16 bg-gradient-to-t from-emerald-500/35 to-transparent rounded-t animate-pulse delay-200"></div>
+            <div className="w-4 h-28 bg-gradient-to-t from-emerald-500/50 to-transparent rounded-t animate-pulse delay-300"></div>
           </div>
-          <div className="absolute top-40 right-16 opacity-20 pointer-events-none">
+          <div className="absolute top-40 right-16 opacity-20">
             <TrendingUp className="w-36 h-36 text-emerald-400 animate-float" />
           </div>
         </div>
@@ -278,18 +278,20 @@ export default function TrackPage({ params }: TrackPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative">
-      {/* Industry-specific decorative pattern */}
-      <IndustryPattern trackSlug={trackSlug} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Industry-specific decorative pattern - must be outside main flow */}
+      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -1 }}>
+        <IndustryPattern trackSlug={trackSlug} />
+      </div>
       
-      {/* Animated background orbs - track specific colors - all children must have pointer-events-none */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className={`absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse pointer-events-none`}></div>
-        <div className={`absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse delay-1000 pointer-events-none`}></div>
+      {/* Animated background orbs - must be behind everything */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: -2 }}>
+        <div className={`absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse`}></div>
+        <div className={`absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse delay-1000`}></div>
       </div>
 
       {/* Progress Bar - positioned below navigation */}
-      <div className="fixed top-16 md:top-20 left-0 right-0 z-40">
+      <div className="fixed top-16 md:top-20 left-0 right-0" style={{ zIndex: 40 }}>
         <div className="relative h-1 bg-slate-700/50 backdrop-blur-sm">
           <div
             className={`absolute top-0 left-0 h-full bg-gradient-to-r ${colors.gradient} transition-all duration-300 ${colors.shadow}`}

@@ -340,22 +340,39 @@ function FeatureCard({ icon: Icon, title, description, href, color, index }: Fea
     emerald: "from-emerald-500 to-emerald-600 shadow-emerald-500/25",
   };
 
+  const hoverBorderColors: Record<string, string> = {
+    purple: "group-hover:border-purple-500/30",
+    indigo: "group-hover:border-indigo-500/30",
+    cyan: "group-hover:border-cyan-500/30",
+    rose: "group-hover:border-rose-500/30",
+    amber: "group-hover:border-amber-500/30",
+    emerald: "group-hover:border-emerald-500/30",
+  };
+
   return (
     <Link 
       href={href}
-      className="group block"
-      style={{ animationDelay: `${index * 50}ms` }}
+      className="group block animate-fade-in-up"
+      style={{ animationDelay: `${index * 80}ms` }}
     >
-      <div className="relative h-full bg-slate-900/50 border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all duration-300 hover:translate-y-[-2px]">
-        <div className={`w-12 h-12 bg-gradient-to-br ${colorClasses[color]} rounded-xl flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform`}>
+      <div className={`relative h-full bg-slate-900/50 backdrop-blur-sm border border-white/5 rounded-2xl p-6 ${hoverBorderColors[color]} transition-all duration-500 hover:translate-y-[-4px] hover:shadow-xl overflow-hidden`}>
+        {/* Subtle glow on hover */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${colorClasses[color]} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-2xl`}></div>
+        
+        <div className={`relative w-12 h-12 bg-gradient-to-br ${colorClasses[color]} rounded-xl flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
           <Icon className="w-6 h-6 text-white" />
         </div>
-        <h3 className="text-lg font-bold text-white mb-2 group-hover:text-purple-200 transition-colors">
+        <h3 className="relative text-lg font-bold text-white mb-2 group-hover:text-purple-200 transition-colors">
           {title}
         </h3>
-        <p className="text-slate-400 text-sm leading-relaxed">
+        <p className="relative text-slate-400 text-sm leading-relaxed group-hover:text-slate-300 transition-colors">
           {description}
         </p>
+        
+        {/* Arrow indicator on hover */}
+        <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+          <ArrowRight className={`w-5 h-5 text-slate-500`} />
+        </div>
       </div>
     </Link>
   );
@@ -376,15 +393,18 @@ function TrackCard({ track, index }: TrackCardProps) {
   return (
     <Link 
       href={href}
-      className="group block"
-      style={{ animationDelay: `${index * 50}ms` }}
+      className="group block animate-fade-in-up"
+      style={{ animationDelay: `${index * 100}ms` }}
     >
-      <div className="relative h-full bg-slate-900/50 border border-white/5 rounded-2xl p-5 hover:border-white/10 transition-all duration-300 hover:translate-y-[-2px]">
-        {/* Track color accent */}
-        <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${track.color} rounded-t-2xl opacity-50 group-hover:opacity-100 transition-opacity`} />
+      <div className="relative h-full bg-slate-900/50 backdrop-blur-sm border border-white/5 rounded-2xl p-5 hover:border-white/20 transition-all duration-500 hover:translate-y-[-4px] hover:shadow-2xl overflow-hidden">
+        {/* Background glow on hover */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${track.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
         
-        <div className="flex items-start space-x-4">
-          <div className={`w-12 h-12 bg-gradient-to-br ${track.color} rounded-xl flex items-center justify-center shadow-lg flex-shrink-0`}>
+        {/* Track color accent */}
+        <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${track.color} rounded-t-2xl opacity-60 group-hover:opacity-100 transition-all duration-300 group-hover:h-1.5`} />
+        
+        <div className="relative flex items-start space-x-4">
+          <div className={`w-12 h-12 bg-gradient-to-br ${track.color} rounded-xl flex items-center justify-center shadow-lg flex-shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
             <Icon className="w-6 h-6 text-white" />
           </div>
           
@@ -392,10 +412,10 @@ function TrackCard({ track, index }: TrackCardProps) {
             <h3 className="text-base font-bold text-white mb-1 group-hover:text-purple-200 transition-colors truncate">
               {track.shortTitle}
             </h3>
-            <p className="text-slate-500 text-xs mb-3 line-clamp-2">
+            <p className="text-slate-500 text-xs mb-3 line-clamp-2 group-hover:text-slate-400 transition-colors">
               {track.audience.split(",")[0]}
             </p>
-            <div className="flex items-center gap-3 text-xs text-slate-500">
+            <div className="flex items-center gap-3 text-xs text-slate-500 group-hover:text-slate-400 transition-colors">
               <div className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 <span>{track.estimatedTime}</span>
