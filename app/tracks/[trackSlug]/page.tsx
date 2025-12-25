@@ -11,7 +11,7 @@ import { financeChapters } from "@/data/finance-content";
 import { 
   ChevronLeft, ChevronRight, BookOpen, Clock, CheckCircle, Menu,
   Building2, Landmark, HeartPulse, Users, Home, GraduationCap, ArrowRight,
-  LucideIcon, TrendingUp
+  LucideIcon, TrendingUp, Sparkles, Shield, Scale, FileText, Award
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -24,6 +24,84 @@ const iconMap: Record<string, LucideIcon> = {
   HeartPulse,
   Users,
   TrendingUp,
+};
+
+// Industry-specific decorative patterns
+const IndustryPattern = ({ trackSlug }: { trackSlug: string }) => {
+  switch (trackSlug) {
+    case "government":
+      return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+          {/* Grid pattern for government - structure and order */}
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px'
+          }}></div>
+          {/* Floating civic symbols */}
+          <div className="absolute top-20 right-20 opacity-20">
+            <Shield className="w-32 h-32 text-blue-400 animate-float" />
+          </div>
+          <div className="absolute bottom-40 left-10 opacity-15">
+            <Scale className="w-24 h-24 text-cyan-400 animate-float delay-1000" />
+          </div>
+        </div>
+      );
+    case "healthcare":
+      return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+          {/* Pulse pattern for healthcare */}
+          <div className="absolute inset-0">
+            <svg className="w-full h-full opacity-10" viewBox="0 0 100 20" preserveAspectRatio="none">
+              <path d="M0,10 L20,10 L25,2 L30,18 L35,10 L100,10" fill="none" stroke="rgba(236, 72, 153, 0.4)" strokeWidth="0.5" />
+            </svg>
+          </div>
+          <div className="absolute top-32 right-16 opacity-20">
+            <HeartPulse className="w-40 h-40 text-rose-400 animate-pulse" />
+          </div>
+        </div>
+      );
+    case "hr":
+      return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+          {/* Connected dots pattern for HR - networks and people */}
+          <div className="absolute top-20 left-1/4">
+            <div className="relative">
+              <div className="w-3 h-3 bg-amber-400/30 rounded-full"></div>
+              <div className="absolute top-0 left-6 w-3 h-3 bg-amber-400/20 rounded-full"></div>
+              <div className="absolute top-6 left-3 w-3 h-3 bg-amber-400/25 rounded-full"></div>
+              <svg className="absolute top-1.5 left-1.5 w-12 h-12 opacity-30">
+                <line x1="0" y1="0" x2="24" y2="0" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
+                <line x1="0" y1="0" x2="12" y2="24" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
+                <line x1="24" y1="0" x2="12" y2="24" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
+              </svg>
+            </div>
+          </div>
+          <div className="absolute bottom-32 right-20 opacity-20">
+            <Users className="w-32 h-32 text-amber-400 animate-float" />
+          </div>
+        </div>
+      );
+    case "finance":
+      return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+          {/* Ascending bars pattern for finance */}
+          <div className="absolute bottom-0 left-1/4 flex items-end space-x-2 opacity-20">
+            <div className="w-4 h-12 bg-gradient-to-t from-emerald-500/30 to-transparent rounded-t animate-pulse"></div>
+            <div className="w-4 h-20 bg-gradient-to-t from-emerald-500/40 to-transparent rounded-t animate-pulse delay-100"></div>
+            <div className="w-4 h-16 bg-gradient-to-t from-emerald-500/35 to-transparent rounded-t animate-pulse delay-200"></div>
+            <div className="w-4 h-28 bg-gradient-to-t from-emerald-500/50 to-transparent rounded-t animate-pulse delay-300"></div>
+          </div>
+          <div className="absolute top-40 right-16 opacity-20">
+            <TrendingUp className="w-36 h-36 text-emerald-400 animate-float" />
+          </div>
+        </div>
+      );
+    default:
+      return null;
+  }
 };
 
 // Content mapping by track slug
@@ -178,8 +256,33 @@ export default function TrackPage({ params }: TrackPageProps) {
 
   const colors = getColorClasses();
 
+  // Get industry-specific tagline
+  const getTrackTagline = () => {
+    switch (trackSlug) {
+      case "government":
+        return "Building ethical frameworks for public trust";
+      case "healthcare":
+        return "Where technology meets compassion";
+      case "hr":
+        return "Fair hiring in the age of algorithms";
+      case "finance":
+        return "Trust through transparent AI";
+      default:
+        return "Your journey to ethical AI";
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative">
+      {/* Industry-specific decorative pattern */}
+      <IndustryPattern trackSlug={trackSlug} />
+      
+      {/* Animated background orbs - track specific colors */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className={`absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse`}></div>
+        <div className={`absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse delay-1000`}></div>
+      </div>
+
       {/* Progress Bar */}
       <div className="fixed top-16 left-0 right-0 z-50">
         <div className="relative h-1 bg-slate-700/50 backdrop-blur-sm">
@@ -231,30 +334,92 @@ export default function TrackPage({ params }: TrackPageProps) {
             {/* Sidebar */}
             <div className={`lg:col-span-3 ${sidebarOpen ? 'block' : 'hidden'} lg:block`}>
               <div className="sticky top-32">
-                {/* Track Info */}
-                <div className="relative mb-6 animate-fade-in-up">
-                  <div className={`absolute inset-0 bg-gradient-to-r ${colors.gradient} rounded-2xl blur-xl opacity-50`}></div>
-                  <div className="relative bg-slate-800/80 backdrop-blur-xl border border-slate-700 rounded-2xl p-6 shadow-2xl">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className={`w-12 h-12 bg-gradient-to-br ${colors.gradient} rounded-xl flex items-center justify-center`}>
-                        <Icon className="w-6 h-6 text-white" />
+                {/* Track Info Card */}
+                <div className="relative mb-6 animate-fade-in-up group">
+                  <div className={`absolute inset-0 bg-gradient-to-r ${colors.gradient} rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity duration-500`}></div>
+                  <div className="relative bg-slate-800/80 backdrop-blur-xl border border-slate-700 rounded-2xl p-6 shadow-2xl overflow-hidden">
+                    {/* Decorative corner */}
+                    <div className={`absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-br ${colors.gradient} rounded-full blur-2xl opacity-30`}></div>
+                    
+                    <div className="flex items-center space-x-3 mb-5">
+                      <div className={`w-14 h-14 bg-gradient-to-br ${colors.gradient} rounded-xl flex items-center justify-center shadow-lg ${colors.shadow} group-hover:scale-110 transition-transform duration-300`}>
+                        <Icon className="w-7 h-7 text-white" />
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-white">{track.shortTitle}</div>
-                        <div className="text-xs text-slate-400">{track.estimatedTime}</div>
+                        <div className="text-sm font-black text-white">{track.shortTitle}</div>
+                        <div className="flex items-center space-x-1.5 text-xs text-slate-400">
+                          <Clock className="w-3 h-3" />
+                          <span>{track.estimatedTime}</span>
+                        </div>
                       </div>
                     </div>
-                    <div className="text-center mb-4">
-                      <div className={`text-4xl font-black bg-gradient-to-r ${colors.gradient} bg-clip-text text-transparent mb-1`}>
-                        {averageProgress}%
+                    
+                    {/* Circular progress indicator */}
+                    <div className="flex items-center justify-center mb-4">
+                      <div className="relative w-28 h-28">
+                        <svg className="w-full h-full transform -rotate-90">
+                          <circle
+                            cx="56"
+                            cy="56"
+                            r="48"
+                            stroke="currentColor"
+                            strokeWidth="8"
+                            fill="none"
+                            className="text-slate-700"
+                          />
+                          <circle
+                            cx="56"
+                            cy="56"
+                            r="48"
+                            stroke="url(#progressGradient)"
+                            strokeWidth="8"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeDasharray={`${averageProgress * 3.01} 301`}
+                            className="transition-all duration-500"
+                          />
+                          <defs>
+                            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" className={colors.text.replace('text-', 'stop-color-').replace('-400', '-500')} stopColor="currentColor" />
+                              <stop offset="100%" className={colors.text.replace('text-', 'stop-color-').replace('-400', '-600')} stopColor="currentColor" />
+                            </linearGradient>
+                          </defs>
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <span className={`text-3xl font-black bg-gradient-to-r ${colors.gradient} bg-clip-text text-transparent`}>
+                            {averageProgress}%
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Complete</span>
+                        </div>
                       </div>
-                      <div className="text-xs text-slate-400 font-semibold">Track Progress</div>
                     </div>
-                    <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
-                      <div
-                        className={`bg-gradient-to-r ${colors.gradient} h-full transition-all duration-500 rounded-full`}
-                        style={{ width: `${averageProgress}%` }}
-                      ></div>
+                    
+                    {/* Completion milestones */}
+                    <div className="flex justify-between items-center text-xs">
+                      <div className="flex items-center space-x-1.5">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${averageProgress >= 25 ? `bg-gradient-to-r ${colors.gradient}` : 'bg-slate-700'}`}>
+                          {averageProgress >= 25 && <CheckCircle className="w-3 h-3 text-white" />}
+                        </div>
+                        <span className="text-slate-400">25%</span>
+                      </div>
+                      <div className="flex items-center space-x-1.5">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${averageProgress >= 50 ? `bg-gradient-to-r ${colors.gradient}` : 'bg-slate-700'}`}>
+                          {averageProgress >= 50 && <CheckCircle className="w-3 h-3 text-white" />}
+                        </div>
+                        <span className="text-slate-400">50%</span>
+                      </div>
+                      <div className="flex items-center space-x-1.5">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${averageProgress >= 75 ? `bg-gradient-to-r ${colors.gradient}` : 'bg-slate-700'}`}>
+                          {averageProgress >= 75 && <CheckCircle className="w-3 h-3 text-white" />}
+                        </div>
+                        <span className="text-slate-400">75%</span>
+                      </div>
+                      <div className="flex items-center space-x-1.5">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${averageProgress >= 100 ? `bg-gradient-to-r ${colors.gradient}` : 'bg-slate-700'}`}>
+                          {averageProgress >= 100 && <CheckCircle className="w-3 h-3 text-white" />}
+                        </div>
+                        <span className="text-slate-400">100%</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -325,26 +490,48 @@ export default function TrackPage({ params }: TrackPageProps) {
                 <div className={`absolute inset-0 bg-gradient-to-r ${colors.gradient} rounded-3xl blur-2xl opacity-20`}></div>
                 <div className="relative bg-slate-800/50 backdrop-blur-xl border border-slate-700 rounded-3xl shadow-2xl overflow-hidden">
                   {/* Module Header */}
-                  <div className={`border-b border-slate-700 bg-gradient-to-r from-slate-800/80 to-slate-800/50 px-8 md:px-12 py-8`}>
-                    <div className={`text-xs font-bold ${colors.text} mb-2 uppercase tracking-wider`}>
-                      {currentModule === 0 ? "Introduction" : `Module ${currentModule}`}
+                  <div className={`relative border-b border-slate-700 bg-gradient-to-r from-slate-800/80 to-slate-800/50 px-8 md:px-12 py-10 overflow-hidden`}>
+                    {/* Decorative gradient accent */}
+                    <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${colors.gradient}`}></div>
+                    <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-20`}></div>
+                    
+                    {/* Tagline */}
+                    <div className="flex items-center space-x-2 mb-4 animate-fade-in">
+                      <Sparkles className={`w-4 h-4 ${colors.text}`} />
+                      <span className={`text-xs font-bold ${colors.text} uppercase tracking-widest`}>
+                        {getTrackTagline()}
+                      </span>
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight">
+                    
+                    <div className={`inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-gradient-to-r ${colors.gradient}/20 border ${colors.border} mb-4`}>
+                      <div className={`w-2 h-2 rounded-full ${colors.bg} animate-pulse`}></div>
+                      <span className="text-xs font-bold text-white">
+                        {currentModule === 0 ? "Introduction" : `Module ${currentModule}`}
+                      </span>
+                    </div>
+                    
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-6 leading-tight animate-fade-in-up">
                       {module.title}
                     </h1>
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
-                      <span className="flex items-center space-x-1.5 bg-slate-700/50 px-3 py-1.5 rounded-full">
-                        <Clock className="w-3.5 h-3.5" />
+                    
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 animate-fade-in-up delay-100">
+                      <span className={`flex items-center space-x-1.5 bg-slate-700/50 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-600/50 hover:border-slate-500/50 transition-colors`}>
+                        <Clock className={`w-3.5 h-3.5 ${colors.text}`} />
                         <span className="font-semibold">{Math.ceil(module.wordCount / 200)} min read</span>
                       </span>
-                      <span className="flex items-center space-x-1.5 bg-slate-700/50 px-3 py-1.5 rounded-full">
+                      <span className={`flex items-center space-x-1.5 bg-slate-700/50 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-600/50 hover:border-slate-500/50 transition-colors`}>
+                        <FileText className={`w-3.5 h-3.5 ${colors.text}`} />
                         <span className="font-semibold">{module.wordCount.toLocaleString()} words</span>
+                      </span>
+                      <span className={`flex items-center space-x-1.5 bg-slate-700/50 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-600/50 hover:border-slate-500/50 transition-colors`}>
+                        <Award className={`w-3.5 h-3.5 ${colors.text}`} />
+                        <span className="font-semibold">{track.shortTitle}</span>
                       </span>
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div className="px-8 md:px-12 py-10 bg-slate-900/30">
+                  <div className="px-8 md:px-12 lg:px-16 py-12 bg-slate-900/30">
                     <article className="prose prose-lg prose-invert max-w-none">
                       <ReactMarkdown 
                         remarkPlugins={[remarkGfm]}
@@ -353,6 +540,44 @@ export default function TrackPage({ params }: TrackPageProps) {
                         {module.content}
                       </ReactMarkdown>
                     </article>
+                    
+                    {/* Module completion encouragement */}
+                    {(readProgress[currentModule] || 0) >= 80 && (
+                      <div className={`mt-12 relative animate-fade-in-up`}>
+                        <div className={`absolute inset-0 bg-gradient-to-r ${colors.gradient} rounded-2xl blur-xl opacity-30`}></div>
+                        <div className={`relative bg-slate-800/60 backdrop-blur-xl border ${colors.border} rounded-2xl p-8 text-center`}>
+                          <div className={`w-16 h-16 bg-gradient-to-br ${colors.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg ${colors.shadow}`}>
+                            <Award className="w-8 h-8 text-white" />
+                          </div>
+                          <h3 className="text-xl font-black text-white mb-2">
+                            {(readProgress[currentModule] || 0) >= 100 ? "Module Complete!" : "Almost There!"}
+                          </h3>
+                          <p className="text-slate-300 text-sm mb-4">
+                            {(readProgress[currentModule] || 0) >= 100 
+                              ? `Great work! You've completed this module. ${currentModule < modules.length - 1 ? "Continue to the next module to keep learning." : "Ready for the quiz?"}`
+                              : "You're doing great! Keep reading to complete this module."
+                            }
+                          </p>
+                          {currentModule < modules.length - 1 ? (
+                            <button
+                              onClick={goToNextModule}
+                              className={`inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r ${colors.gradient} rounded-xl text-white font-bold text-sm hover:shadow-lg ${colors.shadow} transition-all`}
+                            >
+                              <span>Next Module</span>
+                              <ArrowRight className="w-4 h-4" />
+                            </button>
+                          ) : (
+                            <Link
+                              href={`/tracks/${trackSlug}/quiz`}
+                              className={`inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r ${colors.gradient} rounded-xl text-white font-bold text-sm hover:shadow-lg ${colors.shadow} transition-all`}
+                            >
+                              <span>Take the Quiz</span>
+                              <GraduationCap className="w-4 h-4" />
+                            </Link>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Navigation Footer */}
