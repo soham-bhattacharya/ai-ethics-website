@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use, useCallback } from "react";
+import { useState, useEffect, use, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getTrackBySlug, LearningTrack } from "@/data/tracks";
@@ -12,7 +12,7 @@ import { updateModuleProgress } from "@/lib/progress";
 import { 
   ChevronLeft, ChevronRight, BookOpen, Clock, CheckCircle, Menu,
   Building2, Landmark, HeartPulse, Users, Home, GraduationCap, ArrowRight,
-  LucideIcon, TrendingUp, Sparkles, Shield, Scale, FileText, Award
+  LucideIcon, TrendingUp, Sparkles, FileText, Award
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -25,79 +25,6 @@ const iconMap: Record<string, LucideIcon> = {
   HeartPulse,
   Users,
   TrendingUp,
-};
-
-// Industry-specific decorative patterns (rendered inside a fixed pointer-events-none container)
-const IndustryPattern = ({ trackSlug }: { trackSlug: string }) => {
-  switch (trackSlug) {
-    case "government":
-      return (
-        <div className="absolute inset-0 overflow-hidden opacity-30">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px'
-          }}></div>
-          <div className="absolute top-20 right-20 opacity-20">
-            <Shield className="w-32 h-32 text-blue-400 animate-float" />
-          </div>
-          <div className="absolute bottom-40 left-10 opacity-15">
-            <Scale className="w-24 h-24 text-cyan-400 animate-float delay-1000" />
-          </div>
-        </div>
-      );
-    case "healthcare":
-      return (
-        <div className="absolute inset-0 overflow-hidden opacity-30">
-          <div className="absolute inset-0">
-            <svg className="w-full h-full opacity-10" viewBox="0 0 100 20" preserveAspectRatio="none">
-              <path d="M0,10 L20,10 L25,2 L30,18 L35,10 L100,10" fill="none" stroke="rgba(236, 72, 153, 0.4)" strokeWidth="0.5" />
-            </svg>
-          </div>
-          <div className="absolute top-32 right-16 opacity-20">
-            <HeartPulse className="w-40 h-40 text-rose-400 animate-pulse" />
-          </div>
-        </div>
-      );
-    case "hr":
-      return (
-        <div className="absolute inset-0 overflow-hidden opacity-30">
-          <div className="absolute top-20 left-1/4">
-            <div className="relative">
-              <div className="w-3 h-3 bg-amber-400/30 rounded-full"></div>
-              <div className="absolute top-0 left-6 w-3 h-3 bg-amber-400/20 rounded-full"></div>
-              <div className="absolute top-6 left-3 w-3 h-3 bg-amber-400/25 rounded-full"></div>
-              <svg className="absolute top-1.5 left-1.5 w-12 h-12 opacity-30">
-                <line x1="0" y1="0" x2="24" y2="0" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
-                <line x1="0" y1="0" x2="12" y2="24" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
-                <line x1="24" y1="0" x2="12" y2="24" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1" />
-              </svg>
-            </div>
-          </div>
-          <div className="absolute bottom-32 right-20 opacity-20">
-            <Users className="w-32 h-32 text-amber-400 animate-float" />
-          </div>
-        </div>
-      );
-    case "finance":
-      return (
-        <div className="absolute inset-0 overflow-hidden opacity-30">
-          <div className="absolute bottom-0 left-1/4 flex items-end space-x-2 opacity-20">
-            <div className="w-4 h-12 bg-gradient-to-t from-emerald-500/30 to-transparent rounded-t animate-pulse"></div>
-            <div className="w-4 h-20 bg-gradient-to-t from-emerald-500/40 to-transparent rounded-t animate-pulse delay-100"></div>
-            <div className="w-4 h-16 bg-gradient-to-t from-emerald-500/35 to-transparent rounded-t animate-pulse delay-200"></div>
-            <div className="w-4 h-28 bg-gradient-to-t from-emerald-500/50 to-transparent rounded-t animate-pulse delay-300"></div>
-          </div>
-          <div className="absolute top-40 right-16 opacity-20">
-            <TrendingUp className="w-36 h-36 text-emerald-400 animate-float" />
-          </div>
-        </div>
-      );
-    default:
-      return null;
-  }
 };
 
 // Content mapping by track slug
@@ -141,17 +68,25 @@ export default function TrackPage({ params }: TrackPageProps) {
 
   const track = getTrackBySlug(trackSlug);
   const content = getTrackContent(trackSlug);
+  const modules = content?.modules;
+  const moduleCount = modules?.length ?? 0;
 
+  // Initialize read progress array when track changes
   useEffect(() => {
-    if (content) {
-      setReadProgress(new Array(content.modules.length).fill(0));
+    if (moduleCount > 0) {
+      setReadProgress(new Array(moduleCount).fill(0));
     }
-  }, [content]);
+  }, [trackSlug, moduleCount]);
 
-  // Save progress when scrolling
+  // Save progress when scrolling - use refs to avoid dependency issues
+  const progressRef = useRef<number[]>([]);
+  progressRef.current = readProgress;
+  
+  const trackIdRef = useRef(track?.id);
+  trackIdRef.current = track?.id;
+
   useEffect(() => {
-    if (!content || !track) return;
-    const mods = content.modules;
+    if (!modules || moduleCount === 0) return;
 
     const handleScroll = () => {
       const windowHeight = window.innerHeight;
@@ -160,20 +95,28 @@ export default function TrackPage({ params }: TrackPageProps) {
       const progress = documentHeight > 0 ? (scrolled / documentHeight) * 100 : 0;
       const roundedProgress = Math.min(Math.round(progress), 100);
       
-      const newProgress = [...readProgress];
-      newProgress[currentModule] = roundedProgress;
-      setReadProgress(newProgress);
-      
-      // Save progress to localStorage (at 10% intervals or at 100%)
-      const currentSaved = readProgress[currentModule] || 0;
-      if (roundedProgress > currentSaved && (roundedProgress % 10 === 0 || roundedProgress >= 95)) {
-        updateModuleProgress(track.id, mods[currentModule].id, roundedProgress);
-      }
+      // Use functional update to avoid stale closure
+      setReadProgress(prev => {
+        const newProgress = [...prev];
+        if (newProgress[currentModule] !== roundedProgress) {
+          newProgress[currentModule] = roundedProgress;
+          
+          // Save progress to localStorage (at 10% intervals or at 100%)
+          const currentSaved = prev[currentModule] || 0;
+          if (roundedProgress > currentSaved && (roundedProgress % 10 === 0 || roundedProgress >= 95)) {
+            if (trackIdRef.current && modules[currentModule]) {
+              updateModuleProgress(trackIdRef.current, modules[currentModule].id, roundedProgress);
+            }
+          }
+          return newProgress;
+        }
+        return prev; // No change, return same reference
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [currentModule, readProgress, content, track]);
+  }, [currentModule, modules, moduleCount]);
 
   // Handle invalid track
   if (!track || !content) {
@@ -192,11 +135,10 @@ export default function TrackPage({ params }: TrackPageProps) {
   }
 
   const Icon = iconMap[track.icon] || Building2;
-  const modules = content.modules;
-  const module = modules[currentModule];
+  const module = modules![currentModule];
 
   const goToNextModule = () => {
-    if (currentModule < modules.length - 1) {
+    if (currentModule < moduleCount - 1) {
       setCurrentModule(currentModule + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -210,7 +152,7 @@ export default function TrackPage({ params }: TrackPageProps) {
   };
 
   const averageProgress = readProgress.length > 0 
-    ? Math.round(readProgress.reduce((a, b) => a + b, 0) / modules.length)
+    ? Math.round(readProgress.reduce((a, b) => a + b, 0) / moduleCount)
     : 0;
 
   // Get track-specific color classes
@@ -277,21 +219,21 @@ export default function TrackPage({ params }: TrackPageProps) {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Industry-specific decorative pattern - must be outside main flow */}
-      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -1 }}>
-        <IndustryPattern trackSlug={trackSlug} />
-      </div>
-      
-      {/* Animated background orbs - must be behind everything */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: -2 }}>
-        <div className={`absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse`}></div>
-        <div className={`absolute bottom-1/4 -right-32 w-80 h-80 bg-gradient-to-br ${colors.gradient} rounded-full blur-3xl opacity-10 animate-pulse delay-1000`}></div>
-      </div>
+  // Get track-specific background gradient
+  const getTrackBackground = () => {
+    switch (track.accentColor) {
+      case "blue": return "from-slate-900 via-blue-950/30 to-slate-900";
+      case "rose": return "from-slate-900 via-rose-950/30 to-slate-900";
+      case "amber": return "from-slate-900 via-amber-950/30 to-slate-900";
+      case "emerald": return "from-slate-900 via-emerald-950/30 to-slate-900";
+      default: return "from-slate-900 via-slate-800 to-slate-900";
+    }
+  };
 
+  return (
+    <div className={`min-h-screen bg-gradient-to-br ${getTrackBackground()} relative`}>
       {/* Progress Bar - positioned below navigation */}
-      <div className="fixed top-16 md:top-20 left-0 right-0" style={{ zIndex: 40 }}>
+      <div className="fixed top-16 md:top-20 left-0 right-0 z-40">
         <div className="relative h-1 bg-slate-700/50 backdrop-blur-sm">
           <div
             className={`absolute top-0 left-0 h-full bg-gradient-to-r ${colors.gradient} transition-all duration-300 ${colors.shadow}`}
@@ -318,7 +260,7 @@ export default function TrackPage({ params }: TrackPageProps) {
                   <Icon className="w-4 h-4 text-white" />
                 </div>
                 <span className="text-sm font-bold text-white">
-                  Module {currentModule + 1} of {modules.length}
+                  Module {currentModule + 1} of {moduleCount}
                 </span>
               </div>
             </div>
@@ -441,7 +383,7 @@ export default function TrackPage({ params }: TrackPageProps) {
                     </div>
                     
                     <nav className="space-y-2 max-h-[calc(100vh-450px)] overflow-y-auto pr-2 custom-scrollbar">
-                      {modules.map((mod, idx) => (
+                      {modules!.map((mod, idx) => (
                         <button
                           key={mod.id}
                           onClick={() => {
@@ -561,11 +503,11 @@ export default function TrackPage({ params }: TrackPageProps) {
                           </h3>
                           <p className="text-slate-300 text-sm mb-4">
                             {(readProgress[currentModule] || 0) >= 100 
-                              ? `Great work! You've completed this module. ${currentModule < modules.length - 1 ? "Continue to the next module to keep learning." : "Ready for the quiz?"}`
+                              ? `Great work! You've completed this module. ${currentModule < moduleCount - 1 ? "Continue to the next module to keep learning." : "Ready for the quiz?"}`
                               : "You're doing great! Keep reading to complete this module."
                             }
                           </p>
-                          {currentModule < modules.length - 1 ? (
+                          {currentModule < moduleCount - 1 ? (
                             <button
                               onClick={goToNextModule}
                               className={`inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r ${colors.gradient} rounded-xl text-white font-bold text-sm hover:shadow-lg ${colors.shadow} transition-all`}
@@ -606,11 +548,11 @@ export default function TrackPage({ params }: TrackPageProps) {
                       <div className="text-center hidden sm:block">
                         <div className="text-xs text-slate-500 mb-1">Progress</div>
                         <div className={`text-lg font-black bg-gradient-to-r ${colors.gradient} bg-clip-text text-transparent`}>
-                          {currentModule + 1} / {modules.length}
+                          {currentModule + 1} / {moduleCount}
                         </div>
                       </div>
 
-                      {currentModule === modules.length - 1 ? (
+                      {currentModule === moduleCount - 1 ? (
                         <Link
                           href={`/tracks/${trackSlug}/quiz`}
                           className={`group flex items-center space-x-2 px-6 py-3 rounded-xl font-bold text-sm bg-gradient-to-r ${colors.gradient} text-white hover:shadow-lg ${colors.shadow} transition-all duration-300 transform hover:translate-x-1`}

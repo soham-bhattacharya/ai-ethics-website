@@ -200,17 +200,22 @@ export default function TrackQuizPage({ params }: QuizPageProps) {
     handleRestart();
   };
 
+  // Get track-specific background
+  const getQuizBackground = () => {
+    switch (track?.accentColor) {
+      case "blue": return "from-slate-900 via-blue-950/30 to-slate-900";
+      case "rose": return "from-slate-900 via-rose-950/30 to-slate-900";
+      case "amber": return "from-slate-900 via-amber-950/30 to-slate-900";
+      case "emerald": return "from-slate-900 via-emerald-950/30 to-slate-900";
+      default: return "from-slate-900 via-slate-800 to-slate-900";
+    }
+  };
+
   // Module selection view
   if (selectedModule === null) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
-        {/* Animated background - must use negative z-index */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: -1 }}>
-          <div className={`absolute top-20 left-10 w-72 h-72 ${colors.bgLight} rounded-full blur-3xl animate-pulse`}></div>
-          <div className={`absolute bottom-20 right-10 w-96 h-96 ${colors.bgLight} rounded-full blur-3xl animate-pulse delay-1000`}></div>
-        </div>
-
-        <div className="max-w-6xl mx-auto relative z-10">
+      <div className={`min-h-screen bg-gradient-to-br ${getQuizBackground()} py-12 px-4 sm:px-6 lg:px-8`}>
+        <div className="max-w-6xl mx-auto relative">
           {/* Header */}
           <div className="text-center mb-12">
             <Link 
@@ -296,10 +301,10 @@ export default function TrackQuizPage({ params }: QuizPageProps) {
     const perfect = percentage === 100;
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        {/* Celebration particles for good scores - use negative z-index */}
+      <div className={`min-h-screen bg-gradient-to-br ${getQuizBackground()} py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden`}>
+        {/* Celebration particles for good scores - contained within page, not fixed */}
         {passed && (
-          <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: -1 }}>
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
             {[...Array(20)].map((_, i) => (
               <div
                 key={i}
@@ -310,7 +315,7 @@ export default function TrackQuizPage({ params }: QuizPageProps) {
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
                   animationDelay: `${Math.random() * 2}s`,
-                  opacity: 0.5 + Math.random() * 0.5,
+                  opacity: 0.3 + Math.random() * 0.3,
                 }}
               />
             ))}
