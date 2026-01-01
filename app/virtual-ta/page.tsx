@@ -7,11 +7,17 @@ import { governmentModules } from "@/data/government-content";
 import { healthcareChapters } from "@/data/healthcare-content";
 import { hrChapters } from "@/data/hr-content";
 import { financeChapters } from "@/data/finance-content";
+import { insuranceContent } from "@/data/insurance-content";
+import { marketingContent } from "@/data/marketing-content";
+import { educationContent } from "@/data/education-content";
+import { mediaContent } from "@/data/media-content";
+import { manufacturingContent } from "@/data/manufacturing-content";
+import { retailContent } from "@/data/retail-content";
 import { getAllTracks, LearningTrack } from "@/data/tracks";
 import { 
   Bot, Send, Loader2, MessageCircle, Sparkles, Brain, Zap, BookOpen,
   Building2, Landmark, HeartPulse, Users, TrendingUp, ChevronLeft, ArrowRight,
-  LucideIcon
+  LucideIcon, Shield, Megaphone, GraduationCap, Radio, Factory, ShoppingCart
 } from "lucide-react";
 
 interface Message {
@@ -26,6 +32,12 @@ const iconMap: Record<string, LucideIcon> = {
   HeartPulse,
   Users,
   TrendingUp,
+  Shield,
+  Megaphone,
+  GraduationCap,
+  Radio,
+  Factory,
+  ShoppingCart,
 };
 
 // Get content by track
@@ -35,6 +47,12 @@ function getTrackModules(trackId: string) {
     case "healthcare": return healthcareChapters;
     case "hr": return hrChapters;
     case "finance": return financeChapters;
+    case "insurance": return insuranceContent.modules;
+    case "marketing": return marketingContent.modules;
+    case "education": return educationContent.modules;
+    case "media": return mediaContent.modules;
+    case "manufacturing": return manufacturingContent.modules;
+    case "retail": return retailContent.modules;
     case "smb":
     default: return chapters;
   }
@@ -98,333 +116,285 @@ export default function VirtualTAPage() {
     }
   };
 
-  const handleBack = () => {
-    if (selectedChapter !== null) {
-      setSelectedChapter(null);
-      setMessages([]);
-    } else {
-      setSelectedTrack(null);
-    }
-  };
+  const currentTrack = selectedTrack ? tracks.find(t => t.id === selectedTrack) : null;
+  const currentModules = selectedTrack ? getTrackModules(selectedTrack) : [];
 
-  // Track selection view
-  if (selectedTrack === null) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 py-12 px-4 relative overflow-hidden">
-        {/* Animated background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-center mb-16 animate-fade-in-up">
-            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm border border-cyan-500/30 text-white px-8 py-4 rounded-full mb-6 shadow-2xl">
-              <Bot className="w-8 h-8 text-cyan-300 animate-pulse" />
-              <span className="font-black text-2xl">Virtual Teaching Assistant</span>
-              <Brain className="w-8 h-8 text-blue-300" />
-            </div>
-            <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 via-blue-200 to-indigo-200 mb-6">
-              Ask Me Anything
-            </h1>
-            <p className="text-xl text-cyan-200/90 max-w-2xl mx-auto leading-relaxed">
-              Select a learning track to get started with your AI-powered study companion.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tracks.map((track, index) => {
-              const Icon = iconMap[track.icon] || Building2;
-              return (
-                <button
-                  key={track.id}
-                  onClick={() => setSelectedTrack(track.id)}
-                  className="group relative animate-fade-in-up text-left"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${track.color} rounded-3xl blur-xl opacity-30 group-hover:opacity-60 transition-opacity duration-300`}></div>
-                  <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:border-white/30 transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-2 h-full">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className={`w-14 h-14 bg-gradient-to-br ${track.color} rounded-2xl flex items-center justify-center shadow-lg group-hover:rotate-6 transition-transform`}>
-                        <Icon className="w-7 h-7 text-white" />
-                      </div>
-                      <MessageCircle className="w-6 h-6 text-cyan-400 group-hover:scale-110 transition-transform duration-300" />
-                    </div>
-                    <h3 className="text-xl font-black text-white mb-2 group-hover:text-cyan-200 transition-colors">
-                      {track.shortTitle}
-                    </h3>
-                    <p className="text-sm text-slate-400 mb-4 line-clamp-2">
-                      {track.description}
-                    </p>
-                    <div className="flex items-center space-x-2 text-cyan-300">
-                      <BookOpen className="w-4 h-4" />
-                      <span className="text-sm font-semibold">{track.chapterCount} modules</span>
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Chapter selection view
-  const currentTrack = tracks.find(t => t.id === selectedTrack)!;
-  const trackModules = getTrackModules(selectedTrack);
-  const TrackIcon = iconMap[currentTrack.icon] || Building2;
-
-  if (selectedChapter === null) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 py-12 px-4 relative overflow-hidden">
-        {/* Animated background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
-        <div className="max-w-6xl mx-auto relative z-10">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-12">
-            <button
-              onClick={handleBack}
-              className="flex items-center space-x-2 text-cyan-300 hover:text-white transition-colors"
-            >
-              <ChevronLeft className="w-5 h-5" />
-              <span className="font-semibold">All Tracks</span>
-            </button>
-            <div className="flex items-center space-x-3">
-              <div className={`w-10 h-10 bg-gradient-to-br ${currentTrack.color} rounded-xl flex items-center justify-center`}>
-                <TrackIcon className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-bold text-white">{currentTrack.shortTitle}</span>
-            </div>
-          </div>
-
-          <div className="text-center mb-12 animate-fade-in-up">
-            <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
-              Select a Module
-            </h1>
-            <p className="text-lg text-cyan-200/80 max-w-2xl mx-auto">
-              Choose a module to discuss with your AI teaching assistant.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {trackModules.map((module, index) => (
-              <button
-                key={module.id}
-                onClick={() => setSelectedChapter(module.id)}
-                className="group relative animate-fade-in-up text-left"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-r ${currentTrack.color} rounded-3xl blur-xl opacity-30 group-hover:opacity-60 transition-opacity duration-300`}></div>
-                <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover:border-white/30 transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-2">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="text-sm text-cyan-300 font-bold bg-cyan-500/20 px-4 py-2 rounded-full border border-cyan-400/30">
-                      {index === 0 ? "Introduction" : `Module ${index}`}
-                    </div>
-                    <MessageCircle className="w-6 h-6 text-cyan-400 group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <h3 className="text-xl font-black text-white mb-3 group-hover:text-cyan-200 transition-colors line-clamp-2">
-                    {module.title.replace(/^(Introduction: |Module \d+: |Chapter \d+: )/, "")}
-                  </h3>
-                  <div className="flex items-center space-x-2 text-cyan-300">
-                    <Sparkles className="w-4 h-4" />
-                    <span className="text-sm font-semibold">{Math.round(module.wordCount / 200)} min read</span>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Chat view
-  const currentModule = trackModules.find(m => m.id === selectedChapter)!;
+  // Group tracks by category for better organization
+  const policyTrack = tracks.find(t => t.id === "government");
+  const smbTrack = tracks.find(t => t.id === "smb");
+  const regulatedTracks = tracks.filter(t => ["healthcare", "finance", "insurance"].includes(t.id));
+  const nonRegulatedTracks = tracks.filter(t => ["hr", "marketing", "education", "media", "manufacturing", "retail"].includes(t.id));
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 flex flex-col relative overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/30 to-slate-900 overflow-hidden relative">
+      {/* Animated background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      {/* Header */}
-      <div className="relative z-10 border-b border-white/10 bg-slate-800/50 backdrop-blur-2xl shadow-2xl">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={handleBack}
-              className="text-cyan-300 hover:text-cyan-100 flex items-center space-x-2 font-semibold transition-colors"
-            >
-              <ChevronLeft className="w-5 h-5" />
-              <span>Back to modules</span>
-            </button>
-            
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/50">
-                <Bot className="w-6 h-6 text-white animate-pulse" />
-              </div>
-              <div className="hidden sm:block">
-                <div className="text-sm text-cyan-300 font-semibold">{currentTrack.shortTitle}</div>
-                <h1 className="text-lg font-bold text-white line-clamp-1 max-w-xs">
-                  {currentModule.title.replace(/^(Introduction: |Module \d+: |Chapter \d+: )/, "")}
-                </h1>
-              </div>
-            </div>
-
-            <Link 
-              href={selectedTrack === "smb" ? "/ebook" : `/tracks/${selectedTrack}`}
-              className="flex items-center space-x-2 bg-cyan-500/20 backdrop-blur-sm border border-cyan-400/30 px-4 py-2 rounded-full hover:bg-cyan-500/30 transition-colors"
-            >
-              <BookOpen className="w-5 h-5 text-cyan-300" />
-              <span className="text-sm font-semibold text-cyan-300 hidden sm:inline">Read Content</span>
-            </Link>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-sm border border-cyan-500/30 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
+            <Brain className="w-5 h-5 text-cyan-300" />
+            <span>Powered by Gemini 2.5</span>
           </div>
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
+            <span className="bg-gradient-to-r from-cyan-200 via-purple-200 to-pink-200 bg-clip-text text-transparent">
+              Virtual Teaching Assistant
+            </span>
+          </h1>
+          <p className="text-purple-200/80 text-lg max-w-2xl mx-auto">
+            Get personalized help understanding AI ethics concepts. Select a learning track and module to start.
+          </p>
         </div>
-      </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-8 relative z-10">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {messages.length === 0 && (
-            <div className="text-center py-20 animate-fade-in-up">
-              <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-cyan-500/50">
-                <Brain className="w-12 h-12 text-white animate-pulse" />
-              </div>
-              <h2 className="text-3xl font-black text-white mb-4">Ready to Help!</h2>
-              <p className="text-lg text-cyan-200/80 max-w-lg mx-auto leading-relaxed mb-8">
-                Ask me anything about this module. I&apos;m here to help you understand the concepts better.
-              </p>
-              
-              <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-                <button
-                  onClick={() => setInput("Can you summarize the key points?")}
-                  className="group relative"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
-                  <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-cyan-500/50 transition-all duration-300">
-                    <Zap className="w-8 h-8 text-cyan-400 mb-3" />
-                    <p className="text-sm text-white font-semibold">Summarize key points</p>
-                  </div>
-                </button>
-                
-                <button
-                  onClick={() => setInput("What are the practical applications?")}
-                  className="group relative"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
-                  <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-cyan-500/50 transition-all duration-300">
-                    <Brain className="w-8 h-8 text-cyan-400 mb-3" />
-                    <p className="text-sm text-white font-semibold">Practical applications</p>
-                  </div>
-                </button>
-                
-                <button
-                  onClick={() => setInput("Give me a real-world example")}
-                  className="group relative"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
-                  <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-cyan-500/50 transition-all duration-300">
-                    <Sparkles className="w-8 h-8 text-cyan-400 mb-3" />
-                    <p className="text-sm text-white font-semibold">Real-world examples</p>
-                  </div>
-                </button>
+        {/* Step 1: Select Track */}
+        {!selectedTrack && (
+          <div className="max-w-5xl mx-auto animate-fade-in">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-full text-sm text-purple-300">
+                <span className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">1</span>
+                <span>Select a Learning Track</span>
               </div>
             </div>
-          )}
 
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} animate-fade-in-up`}
-              style={{ animationDelay: `${index * 50}ms` }}
+            {/* AI Policy Track */}
+            {policyTrack && (
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3 px-2">AI Policy</h3>
+                <TrackButton track={policyTrack} onClick={() => setSelectedTrack(policyTrack.id)} />
+              </div>
+            )}
+
+            {/* Regulated Industries */}
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-rose-300 uppercase tracking-wider mb-3 px-2">Regulated Industries</h3>
+              <div className="grid md:grid-cols-3 gap-4">
+                {regulatedTracks.map((track) => (
+                  <TrackButton key={track.id} track={track} onClick={() => setSelectedTrack(track.id)} />
+                ))}
+              </div>
+            </div>
+
+            {/* Non-Regulated Industries */}
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-amber-300 uppercase tracking-wider mb-3 px-2">Non-Regulated Industries</h3>
+              <div className="grid md:grid-cols-3 gap-4">
+                {nonRegulatedTracks.map((track) => (
+                  <TrackButton key={track.id} track={track} onClick={() => setSelectedTrack(track.id)} />
+                ))}
+              </div>
+            </div>
+
+            {/* SMB Track */}
+            {smbTrack && (
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-purple-300 uppercase tracking-wider mb-3 px-2">Small & Medium Business</h3>
+                <TrackButton track={smbTrack} onClick={() => setSelectedTrack(smbTrack.id)} />
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Step 2: Select Chapter */}
+        {selectedTrack && !selectedChapter && currentTrack && (
+          <div className="max-w-4xl mx-auto animate-fade-in">
+            <button
+              onClick={() => setSelectedTrack(null)}
+              className="inline-flex items-center gap-2 text-purple-300 hover:text-white mb-6 transition-colors"
             >
-              <div className={`relative max-w-2xl ${message.role === "user" ? "ml-12" : "mr-12"}`}>
-                {message.role === "assistant" && (
-                  <div className="absolute -inset-1 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-3xl blur-lg opacity-30"></div>
-                )}
-                <div
-                  className={`relative backdrop-blur-xl border rounded-3xl p-6 shadow-xl ${
-                    message.role === "user"
-                      ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-500/50 text-white shadow-cyan-500/20"
-                      : "bg-slate-800/70 border-white/20 text-white"
-                  }`}
+              <ChevronLeft className="w-4 h-4" />
+              <span>Back to Tracks</span>
+            </button>
+
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-full text-sm text-purple-300 mb-4">
+                <span className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">2</span>
+                <span>Select a Module</span>
+              </div>
+              <div className="flex items-center justify-center gap-3">
+                {(() => {
+                  const Icon = iconMap[currentTrack.icon] || Building2;
+                  return (
+                    <div className={`w-10 h-10 bg-gradient-to-br ${currentTrack.color} rounded-xl flex items-center justify-center`}>
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                  );
+                })()}
+                <h2 className="text-2xl font-bold text-white">{currentTrack.shortTitle}</h2>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {currentModules.map((module) => (
+                <button
+                  key={module.id}
+                  onClick={() => {
+                    setSelectedChapter(module.id);
+                    setMessages([]);
+                  }}
+                  className="w-full text-left bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:bg-slate-700/50 hover:border-purple-500/30 transition-all duration-300 group"
                 >
-                  {message.role === "assistant" && (
-                    <div className="flex items-center space-x-2 mb-3 pb-3 border-b border-white/10">
-                      <div className="w-8 h-8 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl flex items-center justify-center">
-                        <Bot className="w-5 h-5 text-white" />
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center text-purple-300 font-bold text-sm">
+                        {module.id + 1}
                       </div>
-                      <span className="text-sm font-bold text-cyan-300">Virtual TA</span>
+                      <span className="text-white font-medium">{module.title}</span>
                     </div>
-                  )}
-                  <div className="prose prose-invert max-w-none">
-                    <p className="text-base leading-relaxed whitespace-pre-wrap font-medium">
-                      {message.content}
-                    </p>
+                    <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-purple-400 group-hover:translate-x-1 transition-all" />
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Chat Interface */}
+        {selectedTrack && selectedChapter !== null && currentTrack && (
+          <div className="max-w-4xl mx-auto animate-fade-in">
+            <button
+              onClick={() => {
+                setSelectedChapter(null);
+                setMessages([]);
+              }}
+              className="inline-flex items-center gap-2 text-purple-300 hover:text-white mb-6 transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span>Back to Modules</span>
+            </button>
+
+            {/* Current context */}
+            <div className="bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-xl p-4 mb-6">
+              <div className="flex items-center gap-3 mb-2">
+                {(() => {
+                  const Icon = iconMap[currentTrack.icon] || Building2;
+                  return (
+                    <div className={`w-8 h-8 bg-gradient-to-br ${currentTrack.color} rounded-lg flex items-center justify-center`}>
+                      <Icon className="w-4 h-4 text-white" />
+                    </div>
+                  );
+                })()}
+                <span className="text-purple-300 font-medium">{currentTrack.shortTitle}</span>
+                <span className="text-slate-500">•</span>
+                <span className="text-white font-semibold">
+                  {currentModules[selectedChapter]?.title}
+                </span>
+              </div>
+              <p className="text-slate-400 text-sm">
+                Ask questions about this module&apos;s content. I&apos;m here to help you understand the concepts.
+              </p>
+            </div>
+
+            {/* Messages */}
+            <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-2xl p-6 mb-6 min-h-[400px] max-h-[500px] overflow-y-auto">
+              {messages.length === 0 && (
+                <div className="text-center py-12">
+                  <Bot className="w-16 h-16 text-purple-400 mx-auto mb-4 opacity-50" />
+                  <p className="text-slate-400 mb-4">No messages yet. Start by asking a question!</p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {[
+                      "What are the key takeaways?",
+                      "Explain the main concepts",
+                      "Give me an example"
+                    ].map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        onClick={() => setInput(suggestion)}
+                        className="px-3 py-1.5 bg-purple-500/20 border border-purple-500/30 rounded-full text-xs text-purple-300 hover:bg-purple-500/30 transition-colors"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
-
-          {isLoading && (
-            <div className="flex justify-start animate-fade-in-up">
-              <div className="relative max-w-2xl mr-12">
-                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-3xl blur-lg opacity-30"></div>
-                <div className="relative bg-slate-800/70 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-xl">
-                  <div className="flex items-center space-x-2 mb-3 pb-3 border-b border-white/10">
-                    <div className="w-8 h-8 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl flex items-center justify-center">
-                      <Bot className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-sm font-bold text-cyan-300">Virtual TA</span>
-                  </div>
-                  <div className="flex items-center space-x-3 text-cyan-300">
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span className="text-sm font-semibold">Thinking...</span>
+              )}
+              {messages.map((msg, idx) => (
+                <div
+                  key={idx}
+                  className={`mb-4 ${msg.role === "user" ? "text-right" : ""}`}
+                >
+                  <div
+                    className={`inline-block max-w-[80%] px-4 py-3 rounded-2xl ${
+                      msg.role === "user"
+                        ? "bg-purple-600 text-white rounded-tr-none"
+                        : "bg-slate-700/50 text-slate-200 rounded-tl-none"
+                    }`}
+                  >
+                    <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                   </div>
                 </div>
-              </div>
+              ))}
+              {isLoading && (
+                <div className="flex items-center gap-2 text-purple-300">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="text-sm">Thinking...</span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </div>
 
-      {/* Input */}
-      <div className="relative z-10 border-t border-white/10 bg-slate-800/50 backdrop-blur-2xl p-6 shadow-2xl">
-        <div className="max-w-4xl mx-auto">
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-3xl blur-xl opacity-30"></div>
-            <div className="relative flex items-end space-x-4 bg-slate-900/50 backdrop-blur-xl border-2 border-white/20 rounded-3xl p-4 shadow-2xl">
-              <textarea
+            {/* Input */}
+            <div className="flex gap-3">
+              <input
+                type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask a question about this module..."
-                className="flex-1 bg-transparent text-white placeholder-cyan-300/50 outline-none resize-none text-lg max-h-40 font-medium focus:placeholder-cyan-300/30 transition-colors"
-                rows={1}
+                className="flex-1 bg-slate-800/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors"
+                disabled={isLoading}
               />
               <button
                 onClick={handleSendMessage}
-                disabled={isLoading || !input.trim()}
-                className="group w-14 h-14 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-2xl hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center flex-shrink-0 transform hover:scale-110 disabled:hover:scale-100"
+                disabled={!input.trim() || isLoading}
+                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {isLoading ? (
-                  <Loader2 className="w-6 h-6 animate-spin" />
+                  <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  <Send className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  <>
+                    <Send className="w-5 h-5" />
+                    <span className="hidden sm:inline">Send</span>
+                  </>
                 )}
               </button>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
+  );
+}
+
+// Track Button Component
+function TrackButton({ track, onClick }: { track: LearningTrack; onClick: () => void }) {
+  const Icon = iconMap[track.icon] || Building2;
+  const isPlaceholder = track.isPlaceholder;
+  
+  return (
+    <button
+      onClick={onClick}
+      className="w-full text-left bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:bg-slate-700/50 hover:border-purple-500/30 transition-all duration-300 group relative"
+    >
+      {isPlaceholder && (
+        <div className="absolute top-2 right-2 px-2 py-0.5 bg-amber-500/20 border border-amber-500/30 rounded-full text-xs text-amber-300">
+          Preview
+        </div>
+      )}
+      <div className="flex items-center gap-4">
+        <div className={`w-12 h-12 bg-gradient-to-br ${track.color} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform`}>
+          <Icon className="w-6 h-6 text-white" />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-white font-bold group-hover:text-purple-200 transition-colors">
+            {track.shortTitle}
+          </h3>
+          <p className="text-slate-400 text-sm">{track.chapterCount} modules</p>
+        </div>
+        <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-purple-400 group-hover:translate-x-1 transition-all" />
+      </div>
+    </button>
   );
 }

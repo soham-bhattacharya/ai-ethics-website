@@ -7,15 +7,28 @@ import { governmentQuizzes } from "@/data/government-quizzes";
 import { healthcareQuizzes } from "@/data/healthcare-quizzes";
 import { hrQuizzes } from "@/data/hr-quizzes";
 import { financeQuizzes } from "@/data/finance-quizzes";
+import { insuranceQuizzes } from "@/data/insurance-quizzes";
+import { marketingQuizzes } from "@/data/marketing-quizzes";
+import { educationQuizzes } from "@/data/education-quizzes";
+import { mediaQuizzes } from "@/data/media-quizzes";
+import { manufacturingQuizzes } from "@/data/manufacturing-quizzes";
+import { retailQuizzes } from "@/data/retail-quizzes";
 import { governmentModules } from "@/data/government-content";
 import { healthcareChapters } from "@/data/healthcare-content";
 import { hrChapters } from "@/data/hr-content";
 import { financeChapters } from "@/data/finance-content";
+import { insuranceContent } from "@/data/insurance-content";
+import { marketingContent } from "@/data/marketing-content";
+import { educationContent } from "@/data/education-content";
+import { mediaContent } from "@/data/media-content";
+import { manufacturingContent } from "@/data/manufacturing-content";
+import { retailContent } from "@/data/retail-content";
 import { updateQuizScore } from "@/lib/progress";
 import {
   ChevronLeft, ChevronRight, BookOpen, CheckCircle, XCircle,
   Trophy, Target, Zap, RotateCcw, Home, Building2, Landmark, HeartPulse, Users,
-  LucideIcon, ArrowRight, Sparkles, TrendingUp
+  LucideIcon, ArrowRight, Sparkles, TrendingUp, Shield, Megaphone, GraduationCap,
+  Radio, Factory, ShoppingCart
 } from "lucide-react";
 
 // Icon mapping
@@ -25,6 +38,12 @@ const iconMap: Record<string, LucideIcon> = {
   HeartPulse,
   Users,
   TrendingUp,
+  Shield,
+  Megaphone,
+  GraduationCap,
+  Radio,
+  Factory,
+  ShoppingCart,
 };
 
 interface QuizQuestion {
@@ -43,6 +62,12 @@ function getTrackQuizzes(slug: string): QuizQuestion[] {
     case "healthcare": return healthcareQuizzes;
     case "hr": return hrQuizzes;
     case "finance": return financeQuizzes;
+    case "insurance": return insuranceQuizzes;
+    case "marketing": return marketingQuizzes;
+    case "education": return educationQuizzes;
+    case "media": return mediaQuizzes;
+    case "manufacturing": return manufacturingQuizzes;
+    case "retail": return retailQuizzes;
     default: return [];
   }
 }
@@ -54,6 +79,12 @@ function getTrackModules(slug: string) {
     case "healthcare": return healthcareChapters;
     case "hr": return hrChapters;
     case "finance": return financeChapters;
+    case "insurance": return insuranceContent.modules;
+    case "marketing": return marketingContent.modules;
+    case "education": return educationContent.modules;
+    case "media": return mediaContent.modules;
+    case "manufacturing": return manufacturingContent.modules;
+    case "retail": return retailContent.modules;
     default: return [];
   }
 }

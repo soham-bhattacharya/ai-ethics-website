@@ -8,11 +8,18 @@ import { governmentModules } from "@/data/government-content";
 import { healthcareChapters } from "@/data/healthcare-content";
 import { hrChapters } from "@/data/hr-content";
 import { financeChapters } from "@/data/finance-content";
+import { insuranceContent } from "@/data/insurance-content";
+import { marketingContent } from "@/data/marketing-content";
+import { educationContent } from "@/data/education-content";
+import { mediaContent } from "@/data/media-content";
+import { manufacturingContent } from "@/data/manufacturing-content";
+import { retailContent } from "@/data/retail-content";
 import { updateModuleProgress } from "@/lib/progress";
 import { 
   ChevronLeft, ChevronRight, BookOpen, Clock, CheckCircle, Menu,
   Building2, Landmark, HeartPulse, Users, Home, GraduationCap, ArrowRight,
-  LucideIcon, TrendingUp, Sparkles, FileText, Award
+  LucideIcon, TrendingUp, Sparkles, FileText, Award, Shield, Megaphone,
+  Radio, Factory, ShoppingCart
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -25,10 +32,45 @@ const iconMap: Record<string, LucideIcon> = {
   HeartPulse,
   Users,
   TrendingUp,
+  Shield,
+  Megaphone,
+  GraduationCap,
+  Radio,
+  Factory,
+  ShoppingCart,
 };
 
+// Unified module type
+interface TrackModule {
+  id: number;
+  title: string;
+  content: string;
+  wordCount?: number;
+  estimatedTime?: string;
+}
+
+// Helper to get reading time
+function getReadingTime(module: TrackModule): string {
+  if (module.estimatedTime) {
+    return module.estimatedTime.replace(' min', '');
+  }
+  if (module.wordCount) {
+    return String(Math.ceil(module.wordCount / 200));
+  }
+  return '5'; // Default
+}
+
+// Helper to get word count or estimate
+function getWordCount(module: TrackModule): number {
+  if (module.wordCount) {
+    return module.wordCount;
+  }
+  // Estimate from content length
+  return module.content.split(/\s+/).length;
+}
+
 // Content mapping by track slug
-function getTrackContent(slug: string) {
+function getTrackContent(slug: string): { modules: TrackModule[]; metadata: { title: string; totalModules: number } } | null {
   switch (slug) {
     case "government":
       return {
@@ -49,6 +91,36 @@ function getTrackContent(slug: string) {
       return {
         modules: financeChapters,
         metadata: { title: "AI Ethics for Financial Services", totalModules: financeChapters.length }
+      };
+    case "insurance":
+      return {
+        modules: insuranceContent.modules,
+        metadata: { title: "AI Ethics for Insurance Professionals", totalModules: insuranceContent.modules.length }
+      };
+    case "marketing":
+      return {
+        modules: marketingContent.modules,
+        metadata: { title: "AI Ethics for Marketing & Advertising", totalModules: marketingContent.modules.length }
+      };
+    case "education":
+      return {
+        modules: educationContent.modules,
+        metadata: { title: "AI Ethics for Education", totalModules: educationContent.modules.length }
+      };
+    case "media":
+      return {
+        modules: mediaContent.modules,
+        metadata: { title: "AI Ethics for Media & Communications", totalModules: mediaContent.modules.length }
+      };
+    case "manufacturing":
+      return {
+        modules: manufacturingContent.modules,
+        metadata: { title: "AI Ethics for Manufacturing", totalModules: manufacturingContent.modules.length }
+      };
+    case "retail":
+      return {
+        modules: retailContent.modules,
+        metadata: { title: "AI Ethics for Retail & E-Commerce", totalModules: retailContent.modules.length }
       };
     default:
       return null;
@@ -190,6 +262,54 @@ export default function TrackPage({ params }: TrackPageProps) {
           bg: "bg-emerald-500",
           border: "border-emerald-500/30"
         };
+      case "sky":
+        return {
+          gradient: "from-sky-600 to-blue-600",
+          shadow: "shadow-sky-500/50",
+          text: "text-sky-400",
+          bg: "bg-sky-500",
+          border: "border-sky-500/30"
+        };
+      case "fuchsia":
+        return {
+          gradient: "from-fuchsia-600 to-purple-600",
+          shadow: "shadow-fuchsia-500/50",
+          text: "text-fuchsia-400",
+          bg: "bg-fuchsia-500",
+          border: "border-fuchsia-500/30"
+        };
+      case "indigo":
+        return {
+          gradient: "from-indigo-600 to-violet-600",
+          shadow: "shadow-indigo-500/50",
+          text: "text-indigo-400",
+          bg: "bg-indigo-500",
+          border: "border-indigo-500/30"
+        };
+      case "cyan":
+        return {
+          gradient: "from-cyan-600 to-teal-600",
+          shadow: "shadow-cyan-500/50",
+          text: "text-cyan-400",
+          bg: "bg-cyan-500",
+          border: "border-cyan-500/30"
+        };
+      case "slate":
+        return {
+          gradient: "from-slate-600 to-zinc-600",
+          shadow: "shadow-slate-500/50",
+          text: "text-slate-400",
+          bg: "bg-slate-500",
+          border: "border-slate-500/30"
+        };
+      case "orange":
+        return {
+          gradient: "from-orange-600 to-red-600",
+          shadow: "shadow-orange-500/50",
+          text: "text-orange-400",
+          bg: "bg-orange-500",
+          border: "border-orange-500/30"
+        };
       default:
         return {
           gradient: "from-purple-600 to-indigo-600",
@@ -214,6 +334,18 @@ export default function TrackPage({ params }: TrackPageProps) {
         return "Fair hiring in the age of algorithms";
       case "finance":
         return "Trust through transparent AI";
+      case "insurance":
+        return "Fair coverage in the algorithmic age";
+      case "marketing":
+        return "Ethical engagement, authentic connections";
+      case "education":
+        return "Learning with integrity";
+      case "media":
+        return "Truth in the age of synthesis";
+      case "manufacturing":
+        return "Responsible automation, empowered workers";
+      case "retail":
+        return "Fair prices, honest recommendations";
       default:
         return "Your journey to ethical AI";
     }
@@ -226,6 +358,12 @@ export default function TrackPage({ params }: TrackPageProps) {
       case "rose": return "from-slate-900 via-rose-950/30 to-slate-900";
       case "amber": return "from-slate-900 via-amber-950/30 to-slate-900";
       case "emerald": return "from-slate-900 via-emerald-950/30 to-slate-900";
+      case "sky": return "from-slate-900 via-sky-950/30 to-slate-900";
+      case "fuchsia": return "from-slate-900 via-fuchsia-950/30 to-slate-900";
+      case "indigo": return "from-slate-900 via-indigo-950/30 to-slate-900";
+      case "cyan": return "from-slate-900 via-cyan-950/30 to-slate-900";
+      case "slate": return "from-slate-900 via-zinc-900/50 to-slate-900";
+      case "orange": return "from-slate-900 via-orange-950/30 to-slate-900";
       default: return "from-slate-900 via-slate-800 to-slate-900";
     }
   };
@@ -267,7 +405,7 @@ export default function TrackPage({ params }: TrackPageProps) {
             <div className="flex items-center space-x-4 text-sm">
               <div className="hidden sm:flex items-center space-x-2 text-slate-400">
                 <Clock className="w-4 h-4" />
-                <span>{Math.ceil(module.wordCount / 200)} min</span>
+                <span>{getReadingTime(module)} min</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className={`${colors.text} font-bold`}>{readProgress[currentModule] || 0}%</div>
@@ -466,11 +604,11 @@ export default function TrackPage({ params }: TrackPageProps) {
                     <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 animate-fade-in-up delay-100">
                       <span className={`flex items-center space-x-1.5 bg-slate-700/50 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-600/50 hover:border-slate-500/50 transition-colors`}>
                         <Clock className={`w-3.5 h-3.5 ${colors.text}`} />
-                        <span className="font-semibold">{Math.ceil(module.wordCount / 200)} min read</span>
+                        <span className="font-semibold">{getReadingTime(module)} min read</span>
                       </span>
                       <span className={`flex items-center space-x-1.5 bg-slate-700/50 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-600/50 hover:border-slate-500/50 transition-colors`}>
                         <FileText className={`w-3.5 h-3.5 ${colors.text}`} />
-                        <span className="font-semibold">{module.wordCount.toLocaleString()} words</span>
+                        <span className="font-semibold">{getWordCount(module).toLocaleString()} words</span>
                       </span>
                       <span className={`flex items-center space-x-1.5 bg-slate-700/50 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-600/50 hover:border-slate-500/50 transition-colors`}>
                         <Award className={`w-3.5 h-3.5 ${colors.text}`} />
