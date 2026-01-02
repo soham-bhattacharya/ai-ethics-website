@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "AI Ethics Virtual TA | AI-Powered Teaching Assistant",
-  description: "Get instant answers to your AI ethics questions with our Gemini-powered Virtual Teaching Assistant. Context-aware responses based on our comprehensive playbook content.",
+  description: "Get instant answers to your AI ethics questions with our intelligent Virtual Teaching Assistant. Context-aware responses based on our comprehensive playbook content.",
   keywords: [
     "AI ethics chatbot",
     "AI teaching assistant",
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "AI Ethics Virtual TA | AI-Powered Teaching Assistant",
-    description: "Get instant, context-aware answers to your AI ethics questions with our Gemini-powered Virtual TA.",
+    description: "Get instant, context-aware answers to your AI ethics questions with our intelligent Virtual TA.",
     type: "website",
   },
   alternates: {

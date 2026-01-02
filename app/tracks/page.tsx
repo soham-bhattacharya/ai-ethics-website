@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { getAllTracks, LearningTrack } from "@/data/tracks";
+import { getAllCategories, getAllTracks, TrackCategory, LearningTrack, getTrackStats } from "@/data/tracks";
 import { 
   Building2, Landmark, HeartPulse, Users, Clock, BookOpen, 
-  ArrowRight, Sparkles, GraduationCap, Target, CheckCircle,
-  LucideIcon, TrendingUp
+  ArrowRight, GraduationCap, Target, CheckCircle,
+  LucideIcon, TrendingUp, Shield, Briefcase, Factory, ShoppingCart,
+  Radio, Megaphone, ArrowUpRight, ChevronRight
 } from "lucide-react";
 
 // Icon mapping for dynamic track rendering
@@ -15,228 +16,186 @@ const iconMap: Record<string, LucideIcon> = {
   HeartPulse,
   Users,
   TrendingUp,
+  Shield,
+  Briefcase,
+  Factory,
+  ShoppingCart,
+  Radio,
+  Megaphone,
+  GraduationCap,
 };
 
 export default function TracksPage() {
-  const tracks = getAllTracks();
-  const activeTracks = tracks.filter(t => t.isActive);
-  const comingSoonTracks = tracks.filter(t => t.comingSoon);
+  const categories = getAllCategories();
+  const allTracks = getAllTracks();
+  const stats = getTrackStats();
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900 overflow-hidden relative">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/3 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
-      </div>
+    <div className="min-h-screen bg-slate-950 relative">
+      {/* Subtle pattern background */}
+      <div className="fixed inset-0 grid-pattern opacity-40" />
+      
+      {/* Top accent glow */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-indigo-600/5 rounded-full blur-[150px] pointer-events-none" />
 
       {/* Hero Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-sm border border-cyan-500/30 text-white px-6 py-3 rounded-full text-sm font-semibold mb-8 animate-fade-in shadow-lg">
-            <Target className="w-5 h-5 text-cyan-300" />
-            <span>Specialized Learning Paths</span>
+      <section className="relative py-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-2 text-sm text-indigo-400 font-medium mb-4">
+            <Target className="w-4 h-4" />
+            <span>All Learning Tracks</span>
           </div>
           
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 animate-fade-in-up">
-            <span className="bg-gradient-to-r from-cyan-200 via-purple-200 to-pink-200 bg-clip-text text-transparent">
-              Learning Tracks
-            </span>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Learning Tracks
           </h1>
           
-          <p className="text-xl md:text-2xl text-purple-200/90 mb-8 max-w-4xl mx-auto leading-relaxed animate-fade-in-up delay-100">
-            Tailored AI ethics education for your professional context. Choose the track that fits your role and industry.
+          <p className="text-lg text-slate-400 max-w-2xl mb-8">
+            From Principles to Practice to Proof. Choose the track that matches your professional context.
           </p>
 
-          {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8 text-purple-200/80 text-sm animate-fade-in-up delay-200">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span>📚 {activeTracks.length + 1} Active Tracks</span>
+          {/* Stats row */}
+          <div className="flex flex-wrap gap-6">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-indigo-500 rounded-full" />
+              <span className="text-sm text-slate-400">{stats.totalTracks} Industry Tracks</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse delay-100"></div>
-              <span>📖 20+ Modules</span>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-violet-500 rounded-full" />
+              <span className="text-sm text-slate-400">{stats.totalChapters}+ Modules</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse delay-200"></div>
-              <span>✅ 100+ Quiz Questions</span>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+              <span className="text-sm text-slate-400">{stats.totalQuestions}+ Quiz Questions</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SMB Track - Featured */}
-      <section className="relative py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500/30 to-indigo-500/30 backdrop-blur-sm border border-purple-500/40 text-white px-4 py-2 rounded-full text-xs font-bold mb-4">
-              <Sparkles className="w-4 h-4 text-yellow-300" />
-              <span>FOUNDATIONAL TRACK</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white">
-              Start Here
-            </h2>
-          </div>
+      {/* Category Sections */}
+      <div className="relative z-10">
+        {categories.map((category, catIndex) => (
+          <CategorySection key={category.id} category={category} index={catIndex} />
+        ))}
+      </div>
 
-          <Link href="/ebook" className="group block">
-            <div className="relative animate-fade-in-up">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-3xl blur-2xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
-              <div className="relative bg-slate-800/60 backdrop-blur-xl border border-purple-500/40 rounded-3xl p-8 md:p-12 hover:border-purple-400/60 transition-all duration-500 transform group-hover:scale-[1.02]">
-                <div className="grid md:grid-cols-2 gap-8 items-center">
-                  <div>
-                    <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-2xl shadow-purple-500/50 group-hover:rotate-6 transition-transform duration-500">
-                      <Building2 className="w-10 h-10 text-white" />
-                    </div>
-                    <h3 className="text-3xl font-black text-white mb-4">
-                      AI Ethics for SMBs
-                    </h3>
-                    <p className="text-purple-200/80 text-lg leading-relaxed mb-6">
-                      The foundational playbook for small and medium businesses. Learn practical AI ethics from the ground up with real-world examples and actionable frameworks.
-                    </p>
-                    <div className="flex flex-wrap gap-4 mb-6">
-                      <div className="flex items-center gap-2 text-purple-300">
-                        <Clock className="w-4 h-4" />
-                        <span className="text-sm">45 minutes</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-purple-300">
-                        <BookOpen className="w-4 h-4" />
-                        <span className="text-sm">8 chapters</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-purple-300">
-                        <GraduationCap className="w-4 h-4" />
-                        <span className="text-sm">40 questions</span>
-                      </div>
-                    </div>
-                    <div className="inline-flex items-center space-x-2 text-purple-300 font-bold group-hover:text-white transition-colors">
-                      <span>Start Learning</span>
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-                    </div>
-                  </div>
-                  <div className="hidden md:block">
-                    <div className="grid grid-cols-2 gap-4">
-                      {["Fairness & Bias", "Transparency", "Privacy", "Implementation"].map((topic, idx) => (
-                        <div key={topic} className="bg-slate-700/50 backdrop-blur-sm border border-slate-600/50 rounded-xl p-4 animate-fade-in-up" style={{ animationDelay: `${idx * 100}ms` }}>
-                          <CheckCircle className="w-5 h-5 text-green-400 mb-2" />
-                          <span className="text-sm font-semibold text-white">{topic}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
-      </section>
+      {/* All Tracks Grid */}
+      <section className="relative py-16 px-4 sm:px-6 lg:px-8 border-t border-slate-800/50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl font-bold text-white mb-2">All Industry Tracks</h2>
+          <p className="text-slate-500 mb-8">Quick access to every track</p>
 
-      {/* Professional Tracks */}
-      <section className="relative py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/30 to-blue-500/30 backdrop-blur-sm border border-cyan-500/40 text-white px-4 py-2 rounded-full text-xs font-bold mb-4">
-              <Target className="w-4 h-4 text-cyan-300" />
-              <span>SPECIALIZED TRACKS</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Industry-Specific Learning
-            </h2>
-            <p className="text-purple-200/70 max-w-2xl mx-auto">
-              Deep-dive into AI ethics for your specific professional context with tailored content, case studies, and compliance guidance.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {activeTracks.filter(t => t.id !== "smb").map((track, index) => (
-              <TrackCard key={track.id} track={track} index={index} />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {allTracks.map((track) => (
+              <MiniTrackCard key={track.id} track={track} />
             ))}
           </div>
         </div>
       </section>
-
-      {/* Coming Soon */}
-      {comingSoonTracks.length > 0 && (
-        <section className="relative py-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-amber-500/30 to-orange-500/30 backdrop-blur-sm border border-amber-500/40 text-white px-4 py-2 rounded-full text-xs font-bold mb-4">
-                <Sparkles className="w-4 h-4 text-amber-300" />
-                <span>COMING SOON</span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                More Tracks on the Way
-              </h2>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {comingSoonTracks.map((track, index) => (
-                <ComingSoonCard key={track.id} track={track} index={index} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
     </div>
   );
 }
 
-interface TrackCardProps {
-  track: LearningTrack;
-  index: number;
-}
-
-function TrackCard({ track, index }: TrackCardProps) {
-  const Icon = iconMap[track.icon] || Building2;
+// Category Section Component
+function CategorySection({ category, index }: { category: TrackCategory; index: number }) {
+  const Icon = iconMap[category.icon] || Building2;
+  const isAlternate = index % 2 === 1;
+  
+  // Category accent colors
+  const categoryAccents: Record<string, { border: string; text: string; bg: string }> = {
+    policy: { border: 'border-blue-500/30', text: 'text-blue-400', bg: 'bg-blue-500/10' },
+    regulated: { border: 'border-rose-500/30', text: 'text-rose-400', bg: 'bg-rose-500/10' },
+    'non-regulated': { border: 'border-amber-500/30', text: 'text-amber-400', bg: 'bg-amber-500/10' },
+    smb: { border: 'border-violet-500/30', text: 'text-violet-400', bg: 'bg-violet-500/10' },
+  };
+  
+  const accent = categoryAccents[category.id] || categoryAccents.smb;
   
   return (
-    <Link 
-      href={`/tracks/${track.slug}`}
-      className="group animate-fade-in-up"
-      style={{ animationDelay: `${index * 100}ms` }}
-    >
-      <div className="relative h-full">
-        <div className={`absolute inset-0 bg-gradient-to-br ${track.color} rounded-3xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500`}></div>
-        <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 h-full hover:border-white/30 transition-all duration-300 transform group-hover:scale-[1.02] group-hover:-translate-y-1">
-          {/* Icon */}
-          <div className={`w-16 h-16 bg-gradient-to-br ${track.color} rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:rotate-6 group-hover:scale-110 transition-transform duration-300`}>
-            <Icon className="w-8 h-8 text-white" />
-          </div>
-          
-          {/* Title & Description */}
-          <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-purple-200 transition-colors">
-            {track.shortTitle}
-          </h3>
-          <p className="text-purple-200/70 leading-relaxed mb-4 line-clamp-3">
-            {track.description}
-          </p>
-          
-          {/* Audience */}
-          <p className="text-sm text-purple-300/60 mb-6 line-clamp-2">
-            <span className="font-semibold text-purple-300/80">For:</span> {track.audience}
-          </p>
-          
-          {/* Meta info */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-purple-300/80 mb-6">
-            <div className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
-              <span>{track.estimatedTime}</span>
+    <section className={`py-12 px-4 sm:px-6 lg:px-8 ${isAlternate ? 'bg-slate-900/30' : ''}`}>
+      <div className="max-w-6xl mx-auto">
+        {/* Category Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+          <div className="flex items-center gap-4">
+            <div className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-xl flex items-center justify-center`}>
+              <Icon className="w-6 h-6 text-white" />
             </div>
-            <div className="flex items-center gap-1.5">
-              <BookOpen className="w-4 h-4" />
-              <span>{track.chapterCount} modules</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <GraduationCap className="w-4 h-4" />
-              <span>{track.questionCount} questions</span>
+            <div>
+              <h2 className="text-xl font-bold text-white">{category.title}</h2>
+              <p className={`text-sm ${accent.text}`}>{category.tagline}</p>
             </div>
           </div>
           
-          {/* CTA */}
-          <div className="flex items-center text-purple-300 font-semibold group-hover:text-white transition-colors">
-            <span>Start Learning</span>
-            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" />
+          {category.tracks && category.tracks.length > 3 && (
+            <Link 
+              href={`/${category.slug}`}
+              className={`inline-flex items-center gap-1.5 px-4 py-2 ${accent.bg} ${accent.border} border rounded-lg text-sm font-medium ${accent.text} hover:bg-opacity-20 transition-colors`}
+            >
+              <span>View All {category.tracks.length}</span>
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          )}
+        </div>
+        
+        {/* Tracks */}
+        {category.isSingleTrack && category.singleTrackData ? (
+          <FeaturedTrackCard track={category.singleTrackData} />
+        ) : category.tracks ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {category.tracks.slice(0, 3).map((track) => (
+              <TrackCard key={track.id} track={track} />
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
+// Featured Track Card (for single-track categories like Policy and SMB)
+function FeaturedTrackCard({ track }: { track: LearningTrack }) {
+  const Icon = iconMap[track.icon] || Building2;
+  const href = track.id === "smb" ? "/ebook" : `/tracks/${track.slug}`;
+  
+  return (
+    <Link href={href} className="group block">
+      <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 md:p-8 hover:border-slate-700 transition-all">
+        <div className="grid md:grid-cols-5 gap-6 items-center">
+          <div className="md:col-span-3">
+            <div className={`w-14 h-14 bg-gradient-to-br ${track.color} rounded-xl flex items-center justify-center mb-5`}>
+              <Icon className="w-7 h-7 text-white" />
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-indigo-200 transition-colors">
+              {track.title}
+            </h3>
+            <p className="text-slate-400 leading-relaxed mb-5">
+              {track.description}
+            </p>
+            <div className="flex flex-wrap gap-4 mb-5">
+              <span className="flex items-center gap-1.5 text-sm text-slate-500">
+                <Clock className="w-4 h-4" /> {track.estimatedTime}
+              </span>
+              <span className="flex items-center gap-1.5 text-sm text-slate-500">
+                <BookOpen className="w-4 h-4" /> {track.chapterCount} modules
+              </span>
+              <span className="flex items-center gap-1.5 text-sm text-slate-500">
+                <GraduationCap className="w-4 h-4" /> {track.questionCount} questions
+              </span>
+            </div>
+            <div className="inline-flex items-center gap-2 text-indigo-400 font-medium group-hover:gap-3 transition-all">
+              Start Learning <ArrowRight className="w-4 h-4" />
+            </div>
+          </div>
+          
+          <div className="md:col-span-2 hidden md:block">
+            <div className="grid grid-cols-2 gap-3">
+              {track.features.slice(0, 4).map((feature) => (
+                <div key={feature} className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+                  <CheckCircle className="w-4 h-4 text-emerald-500 mb-2" />
+                  <span className="text-sm text-slate-300">{feature}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -244,50 +203,69 @@ function TrackCard({ track, index }: TrackCardProps) {
   );
 }
 
-function ComingSoonCard({ track, index }: TrackCardProps) {
+// Track Card Component
+function TrackCard({ track }: { track: LearningTrack }) {
   const Icon = iconMap[track.icon] || Building2;
   
   return (
-    <div 
-      className="group animate-fade-in-up cursor-default"
-      style={{ animationDelay: `${index * 100}ms` }}
-    >
-      <div className="relative h-full">
-        <div className="relative bg-slate-800/30 backdrop-blur-xl border border-white/5 rounded-3xl p-6 h-full opacity-75">
-          {/* Coming Soon Badge */}
-          <div className="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-            Coming Soon
-          </div>
-          
-          {/* Icon */}
-          <div className={`w-14 h-14 bg-gradient-to-br ${track.color} rounded-2xl flex items-center justify-center mb-4 shadow-lg opacity-60`}>
-            <Icon className="w-7 h-7 text-white" />
-          </div>
-          
-          {/* Title */}
-          <h3 className="text-xl font-bold text-white/80 mb-2">
-            {track.shortTitle}
-          </h3>
-          
-          {/* Description */}
-          <p className="text-purple-200/50 text-sm leading-relaxed mb-4 line-clamp-2">
-            {track.description}
-          </p>
-          
-          {/* Meta info */}
-          <div className="flex items-center gap-4 text-xs text-purple-300/50">
-            <div className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              <span>{track.estimatedTime}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <BookOpen className="w-3 h-3" />
-              <span>{track.chapterCount} modules</span>
-            </div>
-          </div>
+    <Link href={`/tracks/${track.slug}`} className="group block">
+      <div className="relative bg-slate-900/50 border border-slate-800 rounded-xl p-5 h-full hover:border-slate-700 hover:bg-slate-900/80 transition-all">
+        {track.isPlaceholder && (
+          <span className="absolute top-3 right-3 text-xs font-medium text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+            Preview
+          </span>
+        )}
+        
+        <div className={`w-11 h-11 bg-gradient-to-br ${track.color} rounded-xl flex items-center justify-center mb-4`}>
+          <Icon className="w-5 h-5 text-white" />
+        </div>
+        
+        <h3 className="font-semibold text-white mb-1.5 group-hover:text-indigo-200 transition-colors">
+          {track.shortTitle}
+        </h3>
+        <p className="text-sm text-slate-500 leading-relaxed mb-4 line-clamp-2">
+          {track.description}
+        </p>
+        
+        <div className="flex items-center gap-3 text-xs text-slate-500 mb-4">
+          <span className="flex items-center gap-1">
+            <Clock className="w-3 h-3" /> {track.estimatedTime}
+          </span>
+          <span className="flex items-center gap-1">
+            <BookOpen className="w-3 h-3" /> {track.chapterCount} modules
+          </span>
+        </div>
+        
+        <div className="flex items-center text-sm text-indigo-400 font-medium">
+          {track.isPlaceholder ? "Preview" : "Start Learning"}
+          <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
+// Mini Track Card
+function MiniTrackCard({ track }: { track: LearningTrack }) {
+  const Icon = iconMap[track.icon] || Building2;
+  const href = track.id === "smb" ? "/ebook" : `/tracks/${track.slug}`;
+  
+  return (
+    <Link href={href} className="group block">
+      <div className="bg-slate-900/30 border border-slate-800/50 rounded-lg p-3 hover:bg-slate-900/50 hover:border-slate-700 transition-all">
+        <div className="flex items-center gap-3">
+          <div className={`w-9 h-9 bg-gradient-to-br ${track.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
+            <Icon className="w-4 h-4 text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="text-sm font-medium text-white truncate group-hover:text-indigo-200 transition-colors">
+              {track.shortTitle}
+            </h4>
+            <p className="text-xs text-slate-600">{track.estimatedTime} • {track.chapterCount} modules</p>
+          </div>
+          <ArrowUpRight className="w-4 h-4 text-slate-600 group-hover:text-indigo-400 transition-colors flex-shrink-0" />
+        </div>
+      </div>
+    </Link>
+  );
+}

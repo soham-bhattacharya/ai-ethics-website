@@ -5,6 +5,12 @@ import { governmentModules } from "@/data/government-content";
 import { healthcareChapters } from "@/data/healthcare-content";
 import { hrChapters } from "@/data/hr-content";
 import { financeChapters } from "@/data/finance-content";
+import { insuranceContent } from "@/data/insurance-content";
+import { marketingContent } from "@/data/marketing-content";
+import { educationContent } from "@/data/education-content";
+import { mediaContent } from "@/data/media-content";
+import { manufacturingContent } from "@/data/manufacturing-content";
+import { retailContent } from "@/data/retail-content";
 
 // Track content mapping
 interface ContentModule {
@@ -23,6 +29,19 @@ function getTrackContent(trackId: string): { modules: ContentModule[]; trackName
       return { modules: hrChapters, trackName: "AI Ethics for HR & Recruitment" };
     case "finance":
       return { modules: financeChapters, trackName: "AI Ethics for Financial Services" };
+    // New tracks
+    case "insurance":
+      return { modules: insuranceContent.modules, trackName: "AI Ethics for Insurance Professionals" };
+    case "marketing":
+      return { modules: marketingContent.modules, trackName: "AI Ethics for Marketing & Advertising" };
+    case "education":
+      return { modules: educationContent.modules, trackName: "AI Ethics for Education" };
+    case "media":
+      return { modules: mediaContent.modules, trackName: "AI Ethics for Media & Communications" };
+    case "manufacturing":
+      return { modules: manufacturingContent.modules, trackName: "AI Ethics for Manufacturing" };
+    case "retail":
+      return { modules: retailContent.modules, trackName: "AI Ethics for Retail & E-Commerce" };
     case "smb":
     default:
       return { modules: chapters, trackName: "AI Ethics Playbook for SMBs" };
@@ -106,4 +125,3 @@ Please provide a helpful, clear answer based on the chapter content above.`;
     );
   }
 }
-
