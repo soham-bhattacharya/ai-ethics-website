@@ -210,7 +210,7 @@ export default function Home() {
             <FeatureCard 
               icon={Bot}
               title="AI Teaching Assistant"
-              description="Get answers to your questions from our Gemini-powered tutor that knows all the content."
+              description="Get instant answers to your questions from an AI tutor with deep knowledge of our curriculum."
               color="rose"
             />
             <FeatureCard 

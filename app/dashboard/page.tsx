@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getAllTracks } from "@/data/tracks";
-import { getProgress, getProgressStats, getTrackProgress, calculateTrackCompletion } from "@/lib/progress";
+import { getProgress, getProgressStats, calculateTrackCompletion } from "@/lib/progress";
 import {
   Trophy, Target, BookOpen, Clock, ArrowRight, Sparkles,
   Building2, Landmark, HeartPulse, Users, TrendingUp, Award,
-  CheckCircle, Star, Zap, GraduationCap, BarChart3, Calendar,
-  LucideIcon
+  CheckCircle, Zap, GraduationCap, BarChart3, Calendar,
+  LucideIcon, Shield, Megaphone, Radio, Factory, ShoppingCart
 } from "lucide-react";
 
 // Icon mapping
@@ -18,13 +18,12 @@ const iconMap: Record<string, LucideIcon> = {
   HeartPulse,
   Users,
   TrendingUp,
-};
-
-// Achievement icon mapping
-const achievementIcons: Record<string, string> = {
-  '🎯': 'Target',
-  '⭐': 'Star',
-  '🏆': 'Trophy',
+  Shield,
+  Megaphone,
+  GraduationCap,
+  Radio,
+  Factory,
+  ShoppingCart,
 };
 
 export default function DashboardPage() {
@@ -52,265 +51,242 @@ export default function DashboardPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/30 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-white text-xl">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/30 to-slate-900 py-12 px-4 relative overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/3 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
+    <div className="min-h-screen bg-slate-950 relative">
+      {/* Subtle grid pattern background */}
+      <div className="fixed inset-0 grid-pattern opacity-50" />
+      
+      {/* Accent glow - subtle */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-600/8 rounded-full blur-[120px] pointer-events-none" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 backdrop-blur-sm border border-purple-500/30 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6 animate-fade-in">
-            <BarChart3 className="w-5 h-5 text-purple-300" />
-            <span>Learning Dashboard</span>
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center">
+              <BarChart3 className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <p className="text-sm text-slate-500 font-medium uppercase tracking-wider">Dashboard</p>
+              <h1 className="text-3xl font-bold text-white">Your Progress</h1>
+            </div>
           </div>
-          
-          <h1 className="text-4xl md:text-5xl font-black text-white mb-4 animate-fade-in-up">
-            Your Progress
-          </h1>
-          <p className="text-xl text-purple-200/80 max-w-2xl mx-auto animate-fade-in-up delay-100">
+          <p className="text-slate-400 max-w-xl">
             Track your learning journey across all AI Ethics tracks
           </p>
         </div>
 
-        {/* Stats Overview */}
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
-          <StatCard
-            icon={Target}
-            label="Tracks Started"
-            value={stats.tracksStarted}
-            color="from-blue-500 to-cyan-500"
-            delay={0}
-          />
-          <StatCard
-            icon={Trophy}
-            label="Tracks Completed"
-            value={stats.tracksCompleted}
-            color="from-amber-500 to-yellow-500"
-            delay={100}
-          />
-          <StatCard
-            icon={Award}
-            label="Achievements"
-            value={stats.totalAchievements}
-            color="from-purple-500 to-pink-500"
-            delay={200}
-          />
-          <StatCard
-            icon={Zap}
-            label="Overall Progress"
-            value={`${stats.overallProgress}%`}
-            color="from-green-500 to-emerald-500"
-            delay={300}
-          />
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+          <StatCard icon={Target} label="Tracks Started" value={stats.tracksStarted} accent="indigo" />
+          <StatCard icon={Trophy} label="Completed" value={stats.tracksCompleted} accent="amber" />
+          <StatCard icon={Award} label="Achievements" value={stats.totalAchievements} accent="violet" />
+          <StatCard icon={Zap} label="Progress" value={`${stats.overallProgress}%`} accent="emerald" />
         </div>
 
-        {/* Track Progress */}
-        <div className="mb-12">
-          <div className="flex items-center space-x-3 mb-6">
-            <BookOpen className="w-6 h-6 text-purple-400" />
-            <h2 className="text-2xl font-bold text-white">Learning Tracks</h2>
+        {/* Learning Tracks Section */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-slate-400" />
+              Learning Tracks
+            </h2>
+            <Link href="/tracks" className="text-sm text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors">
+              View all <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tracks.map((track, index) => {
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {tracks.map((track) => {
               const Icon = iconMap[track.icon] || Building2;
               const progress = trackProgressData[track.id] || 0;
+              const href = track.id === "smb" ? "/ebook" : `/tracks/${track.slug}`;
 
               return (
                 <Link
                   key={track.id}
-                  href={track.id === "smb" ? "/ebook" : `/tracks/${track.slug}`}
-                  className="group relative animate-fade-in-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  href={href}
+                  className="group block"
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${track.color} rounded-3xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500`}></div>
-                  <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-6 h-full hover:border-white/30 transition-all duration-300">
+                  <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-5 hover:bg-slate-900/80 hover:border-slate-700 transition-all duration-200">
                     <div className="flex items-start justify-between mb-4">
-                      <div className={`w-14 h-14 bg-gradient-to-br ${track.color} rounded-2xl flex items-center justify-center shadow-lg`}>
-                        <Icon className="w-7 h-7 text-white" />
+                      <div className={`w-11 h-11 bg-gradient-to-br ${track.color} rounded-xl flex items-center justify-center`}>
+                        <Icon className="w-5 h-5 text-white" />
                       </div>
                       {progress >= 100 && (
-                        <div className="bg-green-500/20 border border-green-500/50 text-green-400 text-xs font-bold px-3 py-1 rounded-full flex items-center space-x-1">
-                          <CheckCircle className="w-3 h-3" />
-                          <span>Complete</span>
-                        </div>
+                        <span className="flex items-center gap-1 text-xs font-medium text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full">
+                          <CheckCircle className="w-3 h-3" /> Done
+                        </span>
                       )}
                     </div>
 
-                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-200 transition-colors">
+                    <h3 className="font-semibold text-white mb-1 group-hover:text-indigo-200 transition-colors">
                       {track.shortTitle}
                     </h3>
 
-                    <div className="flex items-center gap-4 text-sm text-slate-400 mb-4">
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        <span>{track.estimatedTime}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <BookOpen className="w-4 h-4" />
-                        <span>{track.chapterCount} modules</span>
-                      </div>
+                    <div className="flex items-center gap-3 text-xs text-slate-500 mb-4">
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" /> {track.estimatedTime}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <BookOpen className="w-3 h-3" /> {track.chapterCount} modules
+                      </span>
                     </div>
 
                     {/* Progress bar */}
-                    <div className="mb-4">
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-slate-400">Progress</span>
-                        <span className="text-purple-300 font-bold">{progress}%</span>
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-slate-500">Progress</span>
+                        <span className="text-slate-300 font-medium">{progress}%</span>
                       </div>
-                      <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+                      <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
                         <div
-                          className={`bg-gradient-to-r ${track.color} h-full transition-all duration-500 rounded-full`}
+                          className={`h-full bg-gradient-to-r ${track.color} transition-all duration-500`}
                           style={{ width: `${progress}%` }}
-                        ></div>
+                        />
                       </div>
-                    </div>
-
-                    <div className="flex items-center text-purple-300 font-semibold group-hover:text-white transition-colors">
-                      <span>{progress > 0 ? "Continue Learning" : "Start Track"}</span>
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" />
                     </div>
                   </div>
                 </Link>
               );
             })}
           </div>
-        </div>
+        </section>
 
-        {/* Achievements */}
-        <div>
-          <div className="flex items-center space-x-3 mb-6">
-            <Trophy className="w-6 h-6 text-amber-400" />
-            <h2 className="text-2xl font-bold text-white">Achievements</h2>
+        {/* Achievements Section */}
+        <section className="mb-12">
+          <div className="flex items-center gap-2 mb-6">
+            <Trophy className="w-5 h-5 text-amber-500" />
+            <h2 className="text-xl font-semibold text-white">Achievements</h2>
           </div>
 
           {achievements.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {achievements.map((achievement, index) => (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {achievements.map((achievement) => (
                 <div
                   key={achievement.id}
-                  className="bg-slate-800/50 backdrop-blur-xl border border-amber-500/20 rounded-2xl p-6 animate-fade-in-up"
-                  style={{ animationDelay: `${index * 50}ms` }}
+                  className="bg-slate-900/50 border border-amber-500/20 rounded-xl p-5"
                 >
-                  <div className="text-4xl mb-3">{achievement.icon}</div>
-                  <h3 className="text-lg font-bold text-white mb-1">{achievement.title}</h3>
-                  <p className="text-sm text-slate-400 mb-3">{achievement.description}</p>
-                  <div className="flex items-center space-x-1 text-xs text-amber-400">
+                  <div className="text-3xl mb-3">{achievement.icon}</div>
+                  <h3 className="font-semibold text-white text-sm mb-1">{achievement.title}</h3>
+                  <p className="text-xs text-slate-500 mb-3">{achievement.description}</p>
+                  <div className="flex items-center gap-1 text-xs text-amber-500/80">
                     <Calendar className="w-3 h-3" />
-                    <span>{new Date(achievement.earnedAt).toLocaleDateString()}</span>
+                    {new Date(achievement.earnedAt).toLocaleDateString()}
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="bg-slate-800/30 backdrop-blur-xl border border-white/5 rounded-3xl p-12 text-center">
-              <div className="w-20 h-20 mx-auto mb-6 bg-slate-700/50 rounded-full flex items-center justify-center">
-                <Award className="w-10 h-10 text-slate-500" />
+            <div className="bg-slate-900/30 border border-slate-800/50 rounded-2xl p-10 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 bg-slate-800/50 rounded-full flex items-center justify-center">
+                <Award className="w-8 h-8 text-slate-600" />
               </div>
-              <h3 className="text-xl font-bold text-slate-400 mb-2">No achievements yet</h3>
-              <p className="text-slate-500 mb-6">Start learning to earn your first achievement!</p>
+              <h3 className="font-semibold text-slate-400 mb-2">No achievements yet</h3>
+              <p className="text-sm text-slate-500 mb-6">Start learning to earn your first achievement</p>
               <Link
                 href="/tracks"
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:shadow-lg transition-all"
+                className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
               >
-                <Sparkles className="w-5 h-5" />
-                <span>Explore Tracks</span>
+                <Sparkles className="w-4 h-4" />
+                Explore Tracks
               </Link>
             </div>
           )}
-        </div>
+        </section>
 
         {/* Quick Actions */}
-        <div className="mt-12 grid md:grid-cols-3 gap-6">
-          <Link
-            href="/tracks"
-            className="group bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-purple-500/50 transition-all"
-          >
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-white group-hover:text-purple-200 transition-colors">Browse Tracks</h3>
-                <p className="text-sm text-slate-400">Explore all learning paths</p>
-              </div>
-              <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-purple-300 group-hover:translate-x-1 transition-all ml-auto" />
-            </div>
-          </Link>
-
-          <Link
-            href="/quiz"
-            className="group bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-purple-500/50 transition-all"
-          >
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-white group-hover:text-purple-200 transition-colors">Take a Quiz</h3>
-                <p className="text-sm text-slate-400">Test your knowledge</p>
-              </div>
-              <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-purple-300 group-hover:translate-x-1 transition-all ml-auto" />
-            </div>
-          </Link>
-
-          <Link
-            href="/virtual-ta"
-            className="group bg-slate-800/30 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-purple-500/50 transition-all"
-          >
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
-                <Zap className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-white group-hover:text-purple-200 transition-colors">Ask Virtual TA</h3>
-                <p className="text-sm text-slate-400">Get AI-powered help</p>
-              </div>
-              <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-purple-300 group-hover:translate-x-1 transition-all ml-auto" />
-            </div>
-          </Link>
-        </div>
+        <section>
+          <h2 className="text-lg font-semibold text-white mb-4">Quick Actions</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            <QuickAction
+              href="/tracks"
+              icon={BookOpen}
+              title="Browse Tracks"
+              subtitle="Explore all learning paths"
+              gradient="from-indigo-500 to-violet-500"
+            />
+            <QuickAction
+              href="/quiz"
+              icon={GraduationCap}
+              title="Take a Quiz"
+              subtitle="Test your knowledge"
+              gradient="from-cyan-500 to-blue-500"
+            />
+            <QuickAction
+              href="/virtual-ta"
+              icon={Zap}
+              title="Ask Virtual TA"
+              subtitle="Get AI-powered help"
+              gradient="from-emerald-500 to-teal-500"
+            />
+          </div>
+        </section>
       </div>
     </div>
   );
 }
 
+// Stat Card Component
 interface StatCardProps {
   icon: LucideIcon;
   label: string;
   value: string | number;
-  color: string;
-  delay: number;
+  accent: 'indigo' | 'amber' | 'violet' | 'emerald';
 }
 
-function StatCard({ icon: Icon, label, value, color, delay }: StatCardProps) {
+const accentColors = {
+  indigo: 'from-indigo-500 to-indigo-600 text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
+  amber: 'from-amber-500 to-amber-600 text-amber-400 bg-amber-500/10 border-amber-500/20',
+  violet: 'from-violet-500 to-violet-600 text-violet-400 bg-violet-500/10 border-violet-500/20',
+  emerald: 'from-emerald-500 to-emerald-600 text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+};
+
+function StatCard({ icon: Icon, label, value, accent }: StatCardProps) {
+  const colors = accentColors[accent];
+  const [gradientPart, textPart] = colors.split(' text-');
+  
   return (
-    <div
-      className="animate-fade-in-up"
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      <div className="relative group">
-        <div className={`absolute inset-0 bg-gradient-to-br ${color} rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity`}></div>
-        <div className="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all">
-          <div className={`w-12 h-12 bg-gradient-to-br ${color} rounded-xl flex items-center justify-center mb-4`}>
-            <Icon className="w-6 h-6 text-white" />
-          </div>
-          <div className="text-3xl font-black text-white mb-1">{value}</div>
-          <div className="text-sm text-slate-400">{label}</div>
-        </div>
+    <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5">
+      <div className={`w-9 h-9 bg-gradient-to-br ${gradientPart} rounded-lg flex items-center justify-center mb-3`}>
+        <Icon className="w-4 h-4 text-white" />
       </div>
+      <div className="text-2xl font-bold text-white mb-0.5">{value}</div>
+      <div className="text-xs text-slate-500">{label}</div>
     </div>
   );
 }
 
+// Quick Action Component
+interface QuickActionProps {
+  href: string;
+  icon: LucideIcon;
+  title: string;
+  subtitle: string;
+  gradient: string;
+}
+
+function QuickAction({ href, icon: Icon, title, subtitle, gradient }: QuickActionProps) {
+  return (
+    <Link href={href} className="group block">
+      <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5 hover:bg-slate-900/80 hover:border-slate-700 transition-all">
+        <div className="flex items-center gap-4">
+          <div className={`w-10 h-10 bg-gradient-to-br ${gradient} rounded-xl flex items-center justify-center`}>
+            <Icon className="w-5 h-5 text-white" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-medium text-white group-hover:text-indigo-200 transition-colors">{title}</h3>
+            <p className="text-xs text-slate-500">{subtitle}</p>
+          </div>
+          <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
+        </div>
+      </div>
+    </Link>
+  );
+}

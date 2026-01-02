@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { chapters } from "@/data/ebook-content";
 import { governmentModules } from "@/data/government-content";
 import { healthcareChapters } from "@/data/healthcare-content";
@@ -15,9 +14,10 @@ import { manufacturingContent } from "@/data/manufacturing-content";
 import { retailContent } from "@/data/retail-content";
 import { getAllTracks, LearningTrack } from "@/data/tracks";
 import { 
-  Bot, Send, Loader2, MessageCircle, Sparkles, Brain, Zap, BookOpen,
+  Bot, Send, Loader2, MessageCircle, Brain,
   Building2, Landmark, HeartPulse, Users, TrendingUp, ChevronLeft, ArrowRight,
-  LucideIcon, Shield, Megaphone, GraduationCap, Radio, Factory, ShoppingCart
+  LucideIcon, Shield, Megaphone, GraduationCap, Radio, Factory, ShoppingCart,
+  Sparkles
 } from "lucide-react";
 
 interface Message {
@@ -119,115 +119,112 @@ export default function VirtualTAPage() {
   const currentTrack = selectedTrack ? tracks.find(t => t.id === selectedTrack) : null;
   const currentModules = selectedTrack ? getTrackModules(selectedTrack) : [];
 
-  // Group tracks by category for better organization
+  // Group tracks by category
   const policyTrack = tracks.find(t => t.id === "government");
   const smbTrack = tracks.find(t => t.id === "smb");
   const regulatedTracks = tracks.filter(t => ["healthcare", "finance", "insurance"].includes(t.id));
   const nonRegulatedTracks = tracks.filter(t => ["hr", "marketing", "education", "media", "manufacturing", "retail"].includes(t.id));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/30 to-slate-900 overflow-hidden relative">
-      {/* Animated background elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
+    <div className="min-h-screen bg-slate-950 relative">
+      {/* Subtle pattern */}
+      <div className="fixed inset-0 dot-pattern opacity-30" />
+      
+      {/* Accent glow */}
+      <div className="fixed top-0 right-1/4 w-[600px] h-[400px] bg-cyan-600/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-sm border border-cyan-500/30 text-white px-6 py-3 rounded-full text-sm font-semibold mb-6">
-            <Brain className="w-5 h-5 text-cyan-300" />
-            <span>Powered by Gemini 2.5</span>
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 text-sm text-cyan-400 font-medium mb-4">
+            <Brain className="w-4 h-4" />
+            <span>Context-Aware Learning Support</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
-            <span className="bg-gradient-to-r from-cyan-200 via-purple-200 to-pink-200 bg-clip-text text-transparent">
-              Virtual Teaching Assistant
-            </span>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+            Virtual Teaching Assistant
           </h1>
-          <p className="text-purple-200/80 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-400 max-w-xl mx-auto">
             Get personalized help understanding AI ethics concepts. Select a learning track and module to start.
           </p>
         </div>
 
         {/* Step 1: Select Track */}
         {!selectedTrack && (
-          <div className="max-w-5xl mx-auto animate-fade-in">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-full text-sm text-purple-300">
-                <span className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">1</span>
-                <span>Select a Learning Track</span>
-              </div>
+          <div className="animate-fade-in">
+            <div className="flex items-center gap-2 justify-center mb-8">
+              <span className="w-7 h-7 bg-indigo-600 rounded-full flex items-center justify-center text-white text-sm font-medium">1</span>
+              <span className="text-sm text-slate-400">Select a Learning Track</span>
             </div>
 
-            {/* AI Policy Track */}
-            {policyTrack && (
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3 px-2">AI Policy</h3>
-                <TrackButton track={policyTrack} onClick={() => setSelectedTrack(policyTrack.id)} />
-              </div>
-            )}
+            <div className="space-y-6">
+              {/* AI Policy */}
+              {policyTrack && (
+                <div>
+                  <h3 className="text-xs font-medium text-blue-400 uppercase tracking-wider mb-3 px-1">AI Policy</h3>
+                  <TrackButton track={policyTrack} onClick={() => setSelectedTrack(policyTrack.id)} />
+                </div>
+              )}
 
-            {/* Regulated Industries */}
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-rose-300 uppercase tracking-wider mb-3 px-2">Regulated Industries</h3>
-              <div className="grid md:grid-cols-3 gap-4">
-                {regulatedTracks.map((track) => (
-                  <TrackButton key={track.id} track={track} onClick={() => setSelectedTrack(track.id)} />
-                ))}
+              {/* Regulated Industries */}
+              <div>
+                <h3 className="text-xs font-medium text-rose-400 uppercase tracking-wider mb-3 px-1">Regulated Industries</h3>
+                <div className="grid md:grid-cols-3 gap-3">
+                  {regulatedTracks.map((track) => (
+                    <TrackButton key={track.id} track={track} onClick={() => setSelectedTrack(track.id)} />
+                  ))}
+                </div>
               </div>
+
+              {/* Non-Regulated Industries */}
+              <div>
+                <h3 className="text-xs font-medium text-amber-400 uppercase tracking-wider mb-3 px-1">Non-Regulated Industries</h3>
+                <div className="grid md:grid-cols-3 gap-3">
+                  {nonRegulatedTracks.map((track) => (
+                    <TrackButton key={track.id} track={track} onClick={() => setSelectedTrack(track.id)} />
+                  ))}
+                </div>
+              </div>
+
+              {/* SMB */}
+              {smbTrack && (
+                <div>
+                  <h3 className="text-xs font-medium text-violet-400 uppercase tracking-wider mb-3 px-1">Small & Medium Business</h3>
+                  <TrackButton track={smbTrack} onClick={() => setSelectedTrack(smbTrack.id)} />
+                </div>
+              )}
             </div>
-
-            {/* Non-Regulated Industries */}
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-amber-300 uppercase tracking-wider mb-3 px-2">Non-Regulated Industries</h3>
-              <div className="grid md:grid-cols-3 gap-4">
-                {nonRegulatedTracks.map((track) => (
-                  <TrackButton key={track.id} track={track} onClick={() => setSelectedTrack(track.id)} />
-                ))}
-              </div>
-            </div>
-
-            {/* SMB Track */}
-            {smbTrack && (
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold text-purple-300 uppercase tracking-wider mb-3 px-2">Small & Medium Business</h3>
-                <TrackButton track={smbTrack} onClick={() => setSelectedTrack(smbTrack.id)} />
-              </div>
-            )}
           </div>
         )}
 
         {/* Step 2: Select Chapter */}
         {selectedTrack && !selectedChapter && currentTrack && (
-          <div className="max-w-4xl mx-auto animate-fade-in">
+          <div className="animate-fade-in">
             <button
               onClick={() => setSelectedTrack(null)}
-              className="inline-flex items-center gap-2 text-purple-300 hover:text-white mb-6 transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-white mb-8 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
-              <span>Back to Tracks</span>
+              Back to Tracks
             </button>
 
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center space-x-2 bg-slate-800/50 px-4 py-2 rounded-full text-sm text-purple-300 mb-4">
-                <span className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">2</span>
-                <span>Select a Module</span>
-              </div>
-              <div className="flex items-center justify-center gap-3">
-                {(() => {
-                  const Icon = iconMap[currentTrack.icon] || Building2;
-                  return (
-                    <div className={`w-10 h-10 bg-gradient-to-br ${currentTrack.color} rounded-xl flex items-center justify-center`}>
-                      <Icon className="w-5 h-5 text-white" />
-                    </div>
-                  );
-                })()}
-                <h2 className="text-2xl font-bold text-white">{currentTrack.shortTitle}</h2>
-              </div>
+            <div className="flex items-center gap-2 justify-center mb-6">
+              <span className="w-7 h-7 bg-indigo-600 rounded-full flex items-center justify-center text-white text-sm font-medium">2</span>
+              <span className="text-sm text-slate-400">Select a Module</span>
+            </div>
+            
+            <div className="flex items-center justify-center gap-3 mb-8">
+              {(() => {
+                const Icon = iconMap[currentTrack.icon] || Building2;
+                return (
+                  <div className={`w-10 h-10 bg-gradient-to-br ${currentTrack.color} rounded-xl flex items-center justify-center`}>
+                    <Icon className="w-5 h-5 text-white" />
+                  </div>
+                );
+              })()}
+              <h2 className="text-xl font-semibold text-white">{currentTrack.shortTitle}</h2>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2 max-w-2xl mx-auto">
               {currentModules.map((module) => (
                 <button
                   key={module.id}
@@ -235,16 +232,16 @@ export default function VirtualTAPage() {
                     setSelectedChapter(module.id);
                     setMessages([]);
                   }}
-                  className="w-full text-left bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:bg-slate-700/50 hover:border-purple-500/30 transition-all duration-300 group"
+                  className="w-full text-left bg-slate-900/50 border border-slate-800 rounded-xl p-4 hover:bg-slate-900/80 hover:border-slate-700 transition-all group"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center text-purple-300 font-bold text-sm">
+                    <div className="flex items-center gap-3">
+                      <span className="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center text-slate-400 text-sm font-medium">
                         {module.id + 1}
-                      </div>
+                      </span>
                       <span className="text-white font-medium">{module.title}</span>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-purple-400 group-hover:translate-x-1 transition-all" />
+                    <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
                   </div>
                 </button>
               ))}
@@ -254,46 +251,44 @@ export default function VirtualTAPage() {
 
         {/* Step 3: Chat Interface */}
         {selectedTrack && selectedChapter !== null && currentTrack && (
-          <div className="max-w-4xl mx-auto animate-fade-in">
+          <div className="animate-fade-in">
             <button
               onClick={() => {
                 setSelectedChapter(null);
                 setMessages([]);
               }}
-              className="inline-flex items-center gap-2 text-purple-300 hover:text-white mb-6 transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-white mb-6 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
-              <span>Back to Modules</span>
+              Back to Modules
             </button>
 
             {/* Current context */}
-            <div className="bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-xl p-4 mb-6">
-              <div className="flex items-center gap-3 mb-2">
+            <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-4 mb-6">
+              <div className="flex items-center gap-3">
                 {(() => {
                   const Icon = iconMap[currentTrack.icon] || Building2;
                   return (
-                    <div className={`w-8 h-8 bg-gradient-to-br ${currentTrack.color} rounded-lg flex items-center justify-center`}>
+                    <div className={`w-9 h-9 bg-gradient-to-br ${currentTrack.color} rounded-lg flex items-center justify-center`}>
                       <Icon className="w-4 h-4 text-white" />
                     </div>
                   );
                 })()}
-                <span className="text-purple-300 font-medium">{currentTrack.shortTitle}</span>
-                <span className="text-slate-500">•</span>
-                <span className="text-white font-semibold">
-                  {currentModules[selectedChapter]?.title}
-                </span>
+                <div>
+                  <span className="text-sm text-slate-500">{currentTrack.shortTitle}</span>
+                  <h3 className="text-white font-medium">{currentModules[selectedChapter]?.title}</h3>
+                </div>
               </div>
-              <p className="text-slate-400 text-sm">
-                Ask questions about this module&apos;s content. I&apos;m here to help you understand the concepts.
-              </p>
             </div>
 
             {/* Messages */}
-            <div className="bg-slate-800/30 backdrop-blur-sm border border-white/10 rounded-2xl p-6 mb-6 min-h-[400px] max-h-[500px] overflow-y-auto">
+            <div className="bg-slate-900/30 border border-slate-800 rounded-2xl p-6 mb-6 min-h-[350px] max-h-[450px] overflow-y-auto">
               {messages.length === 0 && (
-                <div className="text-center py-12">
-                  <Bot className="w-16 h-16 text-purple-400 mx-auto mb-4 opacity-50" />
-                  <p className="text-slate-400 mb-4">No messages yet. Start by asking a question!</p>
+                <div className="text-center py-10">
+                  <div className="w-14 h-14 mx-auto mb-4 bg-slate-800/50 rounded-full flex items-center justify-center">
+                    <Bot className="w-7 h-7 text-slate-500" />
+                  </div>
+                  <p className="text-slate-500 mb-5">No messages yet. Start by asking a question!</p>
                   <div className="flex flex-wrap justify-center gap-2">
                     {[
                       "What are the key takeaways?",
@@ -303,7 +298,7 @@ export default function VirtualTAPage() {
                       <button
                         key={suggestion}
                         onClick={() => setInput(suggestion)}
-                        className="px-3 py-1.5 bg-purple-500/20 border border-purple-500/30 rounded-full text-xs text-purple-300 hover:bg-purple-500/30 transition-colors"
+                        className="px-3 py-1.5 bg-slate-800/50 border border-slate-700/50 rounded-full text-xs text-slate-400 hover:bg-slate-700/50 hover:text-white transition-colors"
                       >
                         {suggestion}
                       </button>
@@ -317,10 +312,10 @@ export default function VirtualTAPage() {
                   className={`mb-4 ${msg.role === "user" ? "text-right" : ""}`}
                 >
                   <div
-                    className={`inline-block max-w-[80%] px-4 py-3 rounded-2xl ${
+                    className={`inline-block max-w-[85%] px-4 py-3 rounded-2xl ${
                       msg.role === "user"
-                        ? "bg-purple-600 text-white rounded-tr-none"
-                        : "bg-slate-700/50 text-slate-200 rounded-tl-none"
+                        ? "bg-indigo-600 text-white rounded-tr-sm"
+                        : "bg-slate-800/80 text-slate-200 rounded-tl-sm"
                     }`}
                   >
                     <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
@@ -328,7 +323,7 @@ export default function VirtualTAPage() {
                 </div>
               ))}
               {isLoading && (
-                <div className="flex items-center gap-2 text-purple-300">
+                <div className="flex items-center gap-2 text-slate-400">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   <span className="text-sm">Thinking...</span>
                 </div>
@@ -343,19 +338,19 @@ export default function VirtualTAPage() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask a question about this module..."
-                className="flex-1 bg-slate-800/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors"
+                className="flex-1 bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500/50 transition-colors"
                 disabled={isLoading}
               />
               <button
                 onClick={handleSendMessage}
                 disabled={!input.trim() || isLoading}
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    <Send className="w-5 h-5" />
+                    <Send className="w-4 h-4" />
                     <span className="hidden sm:inline">Send</span>
                   </>
                 )}
@@ -371,29 +366,28 @@ export default function VirtualTAPage() {
 // Track Button Component
 function TrackButton({ track, onClick }: { track: LearningTrack; onClick: () => void }) {
   const Icon = iconMap[track.icon] || Building2;
-  const isPlaceholder = track.isPlaceholder;
   
   return (
     <button
       onClick={onClick}
-      className="w-full text-left bg-slate-800/50 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:bg-slate-700/50 hover:border-purple-500/30 transition-all duration-300 group relative"
+      className="w-full text-left bg-slate-900/50 border border-slate-800 rounded-xl p-4 hover:bg-slate-900/80 hover:border-slate-700 transition-all group relative"
     >
-      {isPlaceholder && (
-        <div className="absolute top-2 right-2 px-2 py-0.5 bg-amber-500/20 border border-amber-500/30 rounded-full text-xs text-amber-300">
+      {track.isPlaceholder && (
+        <span className="absolute top-2 right-2 px-2 py-0.5 bg-amber-500/10 border border-amber-500/20 rounded-full text-xs text-amber-400">
           Preview
-        </div>
+        </span>
       )}
-      <div className="flex items-center gap-4">
-        <div className={`w-12 h-12 bg-gradient-to-br ${track.color} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform`}>
-          <Icon className="w-6 h-6 text-white" />
+      <div className="flex items-center gap-3">
+        <div className={`w-10 h-10 bg-gradient-to-br ${track.color} rounded-xl flex items-center justify-center`}>
+          <Icon className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1">
-          <h3 className="text-white font-bold group-hover:text-purple-200 transition-colors">
+          <h3 className="text-white font-medium group-hover:text-indigo-200 transition-colors">
             {track.shortTitle}
           </h3>
-          <p className="text-slate-400 text-sm">{track.chapterCount} modules</p>
+          <p className="text-xs text-slate-500">{track.chapterCount} modules</p>
         </div>
-        <ArrowRight className="w-5 h-5 text-slate-500 group-hover:text-purple-400 group-hover:translate-x-1 transition-all" />
+        <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
       </div>
     </button>
   );

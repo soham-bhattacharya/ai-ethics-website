@@ -1,11 +1,22 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { WebsiteJsonLd, OrganizationJsonLd, CourseJsonLd, FAQJsonLd } from "@/components/JsonLd";
 
-const inter = Inter({ subsets: ["latin"] });
+const dmSans = DM_Sans({ 
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+  weight: ["400", "500", "600", "700"]
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-ethics-website.vercel.app";
 
@@ -92,7 +103,7 @@ export default function RootLayout({
         <CourseJsonLd />
         <FAQJsonLd />
       </head>
-      <body className={inter.className}>
+      <body className={`${dmSans.variable} ${jetBrainsMono.variable} font-sans`}>
         <Navigation />
         <main className="min-h-screen">
           {children}
