@@ -53,9 +53,9 @@ export default function Footer() {
                 <Image 
                   src="/aipossible-bigger.jpg" 
                   alt="AIPossible" 
-                  width={160}
-                  height={53}
-                  className="h-11 w-auto opacity-70 group-hover:opacity-100 transition-opacity"
+                  width={240}
+                  height={80}
+                  className="h-16 w-auto opacity-70 group-hover:opacity-100 transition-opacity"
                 />
               </a>
             </div>
