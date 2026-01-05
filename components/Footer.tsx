@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { BookOpen, Bot, GraduationCap, Compass, Heart, ExternalLink } from "lucide-react";
 
 const quickLinks = [
@@ -37,9 +38,27 @@ export default function Footer() {
                 <div className="text-xs text-purple-400">for Professionals</div>
               </div>
             </Link>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6">
+            <p className="text-slate-400 text-sm leading-relaxed mb-4">
               Comprehensive AI ethics education for businesses and professionals of all backgrounds.
             </p>
+            {/* AIPossible Branding */}
+            <div className="flex items-center gap-2 pt-4 border-t border-slate-800">
+              <span className="text-xs text-slate-500">Powered by</span>
+              <a 
+                href="https://aipossible.org" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center group"
+              >
+                <Image 
+                  src="/aipossible.jpeg" 
+                  alt="AIPossible" 
+                  width={80}
+                  height={20}
+                  className="h-5 w-auto opacity-70 group-hover:opacity-100 transition-opacity"
+                />
+              </a>
+            </div>
           </div>
 
           {/* Quick Links */}
