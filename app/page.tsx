@@ -66,9 +66,9 @@ export default function Home() {
                     <Image 
                       src="/aipossible-bigger.jpg" 
                       alt="AIPossible" 
-                      width={120}
-                      height={40}
-                      className="h-7 w-auto opacity-70 group-hover:opacity-100 transition-opacity"
+                      width={160}
+                      height={53}
+                      className="h-10 w-auto opacity-70 group-hover:opacity-100 transition-opacity"
                     />
                   </a>
                 </div>
