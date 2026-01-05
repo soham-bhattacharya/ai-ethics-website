@@ -51,11 +51,11 @@ export default function Footer() {
                 className="flex items-center group"
               >
                 <Image 
-                  src="/aipossible.jpeg" 
+                  src="/aipossible-bigger.jpg" 
                   alt="AIPossible" 
-                  width={80}
-                  height={20}
-                  className="h-5 w-auto opacity-70 group-hover:opacity-100 transition-opacity"
+                  width={120}
+                  height={40}
+                  className="h-8 w-auto opacity-70 group-hover:opacity-100 transition-opacity"
                 />
               </a>
             </div>

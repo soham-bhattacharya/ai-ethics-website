@@ -51,11 +51,11 @@ export default function Navigation() {
               >
                 <span className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">by</span>
                 <Image 
-                  src="/aipossible.jpeg" 
+                  src="/aipossible-bigger.jpg" 
                   alt="AIPossible" 
-                  width={80}
-                  height={24}
-                  className="h-6 w-auto opacity-80 group-hover:opacity-100 transition-opacity"
+                  width={120}
+                  height={40}
+                  className="h-8 w-auto opacity-80 group-hover:opacity-100 transition-opacity"
                 />
               </a>
             </div>
