@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { 
   BookOpen, Bot, GraduationCap, ArrowRight, Sparkles, Zap, 
   LucideIcon, Building2, Landmark, HeartPulse, Users, Clock, 
@@ -48,9 +49,29 @@ export default function Home() {
             {/* Left: Text Content */}
             <div className="text-center lg:text-left">
               {/* Badge */}
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 backdrop-blur-sm border border-cyan-500/20 text-white px-5 py-2.5 rounded-full text-sm font-medium mb-8 animate-fade-in">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-cyan-200">AI Ethics & Policy Academy</span>
+              <div className="flex flex-col sm:flex-row items-center gap-3 mb-8 animate-fade-in">
+                <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 backdrop-blur-sm border border-cyan-500/20 text-white px-5 py-2.5 rounded-full text-sm font-medium">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  <span className="text-cyan-200">AI Ethics & Policy Academy</span>
+                </div>
+                {/* AIPossible Badge */}
+                <div className="inline-flex items-center gap-2 text-xs text-slate-500">
+                  <span>by</span>
+                  <a 
+                    href="https://aipossible.org" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center group"
+                  >
+                    <Image 
+                      src="/aipossible-bigger.jpg" 
+                      alt="AIPossible" 
+                      width={240}
+                      height={80}
+                      className="h-14 w-auto opacity-70 group-hover:opacity-100 transition-opacity"
+                    />
+                  </a>
+                </div>
               </div>
               
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 animate-fade-in-up leading-[1.05] tracking-tight">

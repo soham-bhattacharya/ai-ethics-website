@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { BookOpen, Bot, GraduationCap, Home, Compass, BarChart3, Menu, X } from "lucide-react";
 
@@ -22,7 +23,7 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center gap-4">
             <Link 
               href="/" 
               className="group flex items-center space-x-3 transform hover:scale-105 transition-all duration-300"
@@ -39,6 +40,25 @@ export default function Navigation() {
                 <div className="text-xs text-purple-300 font-semibold">for Professionals</div>
               </div>
             </Link>
+            
+            {/* AIPossible Logo */}
+            <div className="hidden md:flex items-center gap-2 pl-4 border-l border-white/10">
+              <a 
+                href="https://aipossible.org" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 group"
+              >
+                <span className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">by</span>
+                <Image 
+                  src="/aipossible-bigger.jpg" 
+                  alt="AIPossible" 
+                  width={240}
+                  height={80}
+                  className="h-16 w-auto opacity-80 group-hover:opacity-100 transition-opacity"
+                />
+              </a>
+            </div>
           </div>
           
           {/* Desktop Nav */}
